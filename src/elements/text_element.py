@@ -3,6 +3,8 @@ from svg_writer import SVGElement
 
 class TextElement(Element):
     def __init__(self, **kwargs):
+        kwargs["height"] = 0
+        kwargs["width"] = 0
         super().__init__(**kwargs)
         self.text = self.option("text")
         self.color = self.option("color", "black")
