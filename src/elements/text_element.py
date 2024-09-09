@@ -16,14 +16,14 @@ class TextElement(Element):
         align_h = "right"
         if self.option("center_h", False) == True:
             align_h = "center"
-        if self.has_option("align-text-h"):
-            align_h = self.option("align-text-h", "")
+        if self.has_option("align_text_h"):
+            align_h = self.option("align_text_h", "")
 
         align_v = "bottom"
         if self.option("center_v", False) == True:
             align_v = "center"
-        if self.has_option("align-text-v"):
-            align_v = self.option("align-text-v", "")
+        if self.has_option("align_text_v"):
+            align_v = self.option("align_text_v", "")
 
         text_anchor = "middle"
         dy = "0.25em"

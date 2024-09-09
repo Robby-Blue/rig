@@ -11,7 +11,7 @@ def read_element(src):
     element = element_type(**src)
 
     if "children" in src:
-        src_layout = src["layout"]
+        src_layout = element.option("layout", {"type": "relative"})
         layout_type_name = src_layout["type"]
         layout_type = get_layout_contructor(layout_type_name)
 
