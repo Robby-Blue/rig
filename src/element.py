@@ -27,7 +27,7 @@ class Element():
         return []
 
     def get_margin_bounds(self, bounds, render_config):
-        margin = render_config[0] // 100
+        margin = render_config[0] * 0.003
 
         x1, y1, x2, y2 = bounds
 

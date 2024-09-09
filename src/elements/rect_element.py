@@ -8,7 +8,7 @@ class RectElement(Element):
         self.opacity = self.option("opacity", 1)
 
     def to_svg(self, bounds, render_config):
-        border_radius = render_config[0] * 0.05
+        border_radius = render_config[0] * 0.02
 
         margin_bounds = self.get_margin_bounds(bounds, render_config)
         x1, y1, x2, y2 = margin_bounds
