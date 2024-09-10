@@ -15,7 +15,7 @@ class VListLayout(Layout):
         unset_elements = 0
         for child in self.parent.children:
             if child.has_option("height"):
-                total_height += percent_height * child.option("height")
+                total_height += percent_height * child.get_height(bounds)
             else:
                 unset_elements += 1
         
@@ -25,7 +25,7 @@ class VListLayout(Layout):
 
         for child in self.parent.children:
             if child.has_option("height"):
-                height = percent_height * child.option("height")
+                height = percent_height * child.get_height(bounds)
             else:
                 height = height_left / unset_elements
             child_bounds = (x1, pos_y, x2, pos_y+height)

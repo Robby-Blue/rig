@@ -15,8 +15,8 @@ class RelativeLayout(Layout):
             dx = percent_width * child.option("x", 0)
             dy = percent_height * child.option("y", 0)
             
-            width = percent_width * child.option("width", 100)
-            height = percent_height * child.option("height", 100)
+            width = percent_width * child.get_width(bounds)
+            height = percent_height * child.get_height(bounds)
 
             dx = self.align(dx, width, percent_width, "h", child)
             dy = self.align(dy, height, percent_height, "v", child)

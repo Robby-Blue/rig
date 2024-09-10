@@ -11,15 +11,15 @@ class SVGRootElement(Element):
         return SVGElement(
             "svg",
             {
-                "height": self.option("height"),
-                "width": self.option("width"),
+                "height": self.get_height(),
+                "width": self.get_width(),
                 "xmlns": "http://www.w3.org/2000/svg"
             },
             layout_svg)
     
     def __str__(self):
-        bounds = (0, 0, self.option("width"), self.option("height"))
-        render_config = (self.option("width"), self.option("height"))
+        bounds = (0, 0, self.get_width(), self.get_height())
+        render_config = (self.get_width(), self.get_height())
         return str(self.to_svg(bounds, render_config))
     
     def get_name(self=None):

@@ -25,7 +25,7 @@ class HListLayout(Layout):
 
         for child in self.parent.children:
             if child.has_option("width"):
-                width = percent_width * child.option("width")
+                width = percent_width * child.get_width(bounds)
             else:
                 width = width_left / unset_elements
             child_bounds = (pos_x, y1, pos_x+width, y2)
