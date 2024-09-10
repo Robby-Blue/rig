@@ -57,13 +57,13 @@ class CircleElement(Element):
             return "h"
         if self.has_option("height"):
             return "v"
-        return None
+        return "h"
 
-    def get_size(self, bounds):
+    def get_size(self, bounds, render_config):
+        bounds = self.get_margin_bounds(bounds, render_config)
         x1, y1, x2, y2 = bounds
         orientation = self.get_orientation((x1, y1, x2, y2))
 
-        print(orientation)
         if orientation == "h":
             total_width = (x2-x1)
             percent_width = self.option("width")

@@ -43,14 +43,14 @@ class Element():
 
         return (x1, y1, x2, y2)
     
-    def get_size(self, bounds=None):
+    def get_size(self, bounds=None, render_config=None):
         return [self.option("width", 0), self.option("height", 0)]
 
-    def get_width(self, bounds=None):
-        return self.get_size(bounds)[0]
+    def get_width(self, bounds=None, render_config=None):
+        return self.get_size(bounds, render_config)[0]
 
-    def get_height(self, bounds=None):
-        return self.get_size(bounds)[1]
+    def get_height(self, bounds=None, render_config=None):
+        return self.get_size(bounds, render_config)[1]
     
     def option(self, key, default=None):
         if not key in self.options:
