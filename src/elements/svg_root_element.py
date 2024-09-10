@@ -22,5 +22,5 @@ class SVGRootElement(Element):
         render_config = (self.option("width"), self.option("height"))
         return str(self.to_svg(bounds, render_config))
     
-    def get_name():
+    def get_name(self=None):
         return "svg"

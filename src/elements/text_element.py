@@ -53,5 +53,5 @@ class TextElement(Element):
 
         return [svg_element]
     
-    def get_name():
+    def get_name(self=None):
         return "text"

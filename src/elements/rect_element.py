@@ -31,5 +31,5 @@ class RectElement(Element):
             }),
             *layout_svg]
     
-    def get_name():
+    def get_name(self=None):
         return "rect"

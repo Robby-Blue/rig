@@ -1,6 +1,7 @@
 class Element():
 
     options = {}
+    parent = None
 
     def __init__(self, **kwargs):
         self.options = kwargs
@@ -8,8 +9,12 @@ class Element():
         self.layout = None
         self.children = []
 
+    def set_parent(self, parent):
+        self.parent = parent
+
     def add_child(self, child):
         self.children.append(child)
+        child.set_parent(self)
 
     def set_layout(self, layout):
         layout.set_parent(self)

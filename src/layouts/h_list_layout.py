@@ -35,5 +35,5 @@ class HListLayout(Layout):
 
         return svg_children
     
-    def get_name():
+    def get_name(self=None):
         return "hlist"

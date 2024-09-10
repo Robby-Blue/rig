@@ -8,5 +8,5 @@ class ContainerElement(Element):
         layout_svg = self.get_layout_svg(bounds, render_config)
         return layout_svg
     
-    def get_name():
+    def get_name(self=None):
         return "container"

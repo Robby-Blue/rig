@@ -40,5 +40,5 @@ class RelativeLayout(Layout):
 
         return pos
     
-    def get_name():
+    def get_name(self=None):
         return "relative"
