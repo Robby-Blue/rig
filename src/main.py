@@ -3,6 +3,7 @@ import json
 
 from elements import get_element_contructor
 from layouts import get_layout_contructor
+from renderer import svg_renderer
 
 def read_element(src):
     element_type_name = src["type"]
@@ -27,14 +28,22 @@ def main():
         print("not enough arguments:")
         print("python", sys.argv[0], "<input> <output>")
         return
+    
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
 
-    with open(sys.argv[1], "r") as f:
+    with open(input_file, "r") as f:
         src = json.load(f)
 
     svg_element = read_element(src)
-    svg = str(svg_element)
-    with open(sys.argv[2], "w") as f:
-        f.write(svg)
+    svg = svg_element.to_svg()
+
+    if output_file.endswith("svg"):
+        with open(output_file, "w") as f:
+            f.write(str(svg))
+    if output_file.endswith("png"):
+        img = svg_renderer.render(svg)
+        img.save(output_file)
 
 if __name__ == "__main__":
     main()

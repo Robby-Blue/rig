@@ -1,14 +1,11 @@
 from element import Element
-from svg_writer import SVGElement
+from svg_elements import SVGTextElement
 
 class TextElement(Element):
     def __init__(self, **kwargs):
         kwargs["height"] = 0
         kwargs["width"] = 0
         super().__init__(**kwargs)
-        self.text = self.option("text")
-        self.color = self.option("color", "black")
-        self.opacity = self.option("opacity", 1)
 
     def to_svg(self, bounds, render_config):
         x1, y1, _, _ = bounds
@@ -39,17 +36,15 @@ class TextElement(Element):
             _, y1, _, _ = self.get_margin_bounds(bounds, render_config)
             dy = "1em"
 
-        svg_element = SVGElement(
-            "text",
+        svg_element = SVGTextElement(
             {
                 "x": x1,
                 "y": y1,
                 "text-anchor": text_anchor,
                 "dy": dy,
-                "fill": self.color,
-                "fill-opacity": self.opacity
+                "fill": self.option("color", "#FFFFFF")
             },
-            [self.text])
+            [self.option("text")])
 
         return [svg_element]
     

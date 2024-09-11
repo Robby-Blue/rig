@@ -1,11 +1,9 @@
 from element import Element
-from svg_writer import SVGElement
+from svg_elements import SVGRectElement
 
 class RectElement(Element):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.color = self.option("color", "black")
-        self.opacity = self.option("opacity", 1)
 
     def to_svg(self, bounds, render_config):
         border_radius = render_config[0] * 0.02
@@ -17,8 +15,7 @@ class RectElement(Element):
         height = y2-y1
 
         layout_svg = self.get_layout_svg(margin_bounds, render_config)
-        return [SVGElement(
-            "rect",
+        return [SVGRectElement(
             {
                 "x": x1,
                 "y": y1,
@@ -26,8 +23,9 @@ class RectElement(Element):
                 "height": height,
                 "rx": border_radius,
                 "ry": border_radius,
-                "fill": self.color,
-                "fill-opacity": self.opacity
+                "fill": self.option("color", "#00000000"),
+                "stroke": self.option("stroke", "#FFFFFF"),
+                "stroke-width": 2
             }),
             *layout_svg]
     

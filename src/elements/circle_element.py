@@ -1,5 +1,5 @@
 from element import Element
-from svg_writer import SVGElement
+from svg_elements import SVGCircleElement
 
 class CircleElement(Element):
     def __init__(self, **kwargs):
@@ -26,14 +26,12 @@ class CircleElement(Element):
         y = (y1+y2)/2
         
         layout_svg = self.get_layout_svg(margin_bounds, render_config)
-        return [SVGElement(
-            "circle",
+        return [SVGCircleElement(
             {
                 "r": size,
                 "cx": x,
                 "cy": y,
-                "fill": self.option("color", "black"),
-                "opacity": self.option("opacity", 1)
+                "fill": self.option("color", "black")
             }),
             *layout_svg]
     

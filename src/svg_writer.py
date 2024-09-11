@@ -11,6 +11,12 @@ class SVGElement():
 
         self.children = children
 
+    def render(self, img):
+        pass
+
+    def get(self, key):
+        return self.attributes[key]
+
     def __str__(self):
         attributes_str = ""
         for key, val in self.attributes.items():
