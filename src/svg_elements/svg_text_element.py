@@ -7,7 +7,10 @@ class SVGTextElement(SVGElement):
         super().__init__("text", src, attributes, children)
 
     def render(self, img):
-        font_size = self.get("font-size")
+        total_width = self.src.root().option("width")
+        width_multiplier = total_width / 700
+
+        font_size = self.get("font-size") * width_multiplier
         font = ImageFont.truetype("Pillow/Tests/fonts/DejaVuSans.ttf", font_size)
 
         x = self.get("x")
@@ -25,10 +28,12 @@ class SVGTextElement(SVGElement):
         if self.get("dy") == "1em":
             anchor_y = "b"
 
+        stroke_width = int(self.get("stroke-width")*2*width_multiplier)
+
         img.text((x, y),
             text,
             font=font,
             anchor=anchor_x+anchor_y,
             fill=self.get("fill"),
             stroke_fill=self.get("stroke"),
-            stroke_width=self.get("stroke-width")*2)
+            stroke_width=stroke_width)

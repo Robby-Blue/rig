@@ -7,7 +7,7 @@ class TextElement(Element):
         kwargs["width"] = 0
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds, render_config):
+    def to_svg(self, bounds):
         x1, y1, _, _ = bounds
         
         align_h = "right"
@@ -28,12 +28,12 @@ class TextElement(Element):
         # but that doesnt work everywhere
 
         if align_h == "right":
-            x1, _, _, _ = self.get_margin_bounds(bounds, render_config)
+            x1, _, _, _ = self.get_margin_bounds(bounds)
             text_anchor = "start"
         if align_h == "left":
             text_anchor = "end"
         if align_v == "bottom":
-            _, y1, _, _ = self.get_margin_bounds(bounds, render_config)
+            _, y1, _, _ = self.get_margin_bounds(bounds)
             dy = "1em"
 
         svg_element = SVGTextElement(self,

@@ -22,19 +22,19 @@ class Element():
         layout.set_parent(self)
         self.layout = layout
 
-    def get_layout_svg(self, bounds, render_config):
+    def get_layout_svg(self, bounds):
         if not self.children:
             return []
         if not self.layout:
             from layouts import VListLayout
             self.set_layout(VListLayout())
-        return self.layout.to_svg(bounds, render_config)
+        return self.layout.to_svg(bounds)
 
-    def to_svg(bounds, render_config):
+    def to_svg(bounds):
         return []
 
-    def get_margin_bounds(self, bounds, render_config, amplifier=1):
-        margin = render_config[0] * 0.003 * amplifier
+    def get_margin_bounds(self, bounds, amplifier=1):
+        margin = self.root().option("width") * 0.003 * amplifier
 
         x1, y1, x2, y2 = bounds
 
@@ -45,14 +45,19 @@ class Element():
 
         return (x1, y1, x2, y2)
     
-    def get_size(self, bounds=None, render_config=None):
+    def root(self):
+        if self.parent:
+            return self.parent.root()
+        return self
+    
+    def get_size(self, bounds=None):
         return [self.option("width", 0), self.option("height", 0)]
 
-    def get_width(self, bounds=None, render_config=None):
-        return self.get_size(bounds, render_config)[0]
+    def get_width(self, bounds=None):
+        return self.get_size(bounds)[0]
 
-    def get_height(self, bounds=None, render_config=None):
-        return self.get_size(bounds, render_config)[1]
+    def get_height(self, bounds=None):
+        return self.get_size(bounds)[1]
     
     def option(self, key, default=None):
         if not key in self.options:

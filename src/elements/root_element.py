@@ -5,13 +5,10 @@ class RootElement(Element):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds=None, render_config=None):
-        if bounds is None:
-            bounds = (0, 0, self.get_width(), self.get_height())
-        if render_config is None:
-            render_config = (self.get_width(), self.get_height())
+    def to_svg(self, bounds=None):
+        bounds = (0, 0, self.get_width(), self.get_height())
         
-        layout_svg = self.get_layout_svg(bounds, render_config)
+        layout_svg = self.get_layout_svg(bounds)
 
         return SVGRootElement(self,
             {

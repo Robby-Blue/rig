@@ -8,8 +8,8 @@ class CircleElement(Element):
             kwargs["height"] = kwargs["size"]
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds, render_config):
-        margin_bounds = self.get_margin_bounds(bounds, render_config)
+    def to_svg(self, bounds):
+        margin_bounds = self.get_margin_bounds(bounds)
         x1, y1, x2, y2 = margin_bounds
 
         orientation = self.get_orientation((x1, y1, x2, y2))
@@ -25,7 +25,7 @@ class CircleElement(Element):
         x = (x1+x2)/2
         y = (y1+y2)/2
         
-        layout_svg = self.get_layout_svg(margin_bounds, render_config)
+        layout_svg = self.get_layout_svg(margin_bounds)
         return [SVGCircleElement(self,
             {
                 "r": size,
@@ -57,8 +57,8 @@ class CircleElement(Element):
             return "v"
         return "h"
 
-    def get_size(self, bounds, render_config):
-        bounds = self.get_margin_bounds(bounds, render_config)
+    def get_size(self, bounds):
+        bounds = self.get_margin_bounds(bounds)
         x1, y1, x2, y2 = bounds
         orientation = self.get_orientation((x1, y1, x2, y2))
 
