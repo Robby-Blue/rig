@@ -33,8 +33,8 @@ class Element():
     def to_svg(bounds, render_config):
         return []
 
-    def get_margin_bounds(self, bounds, render_config):
-        margin = render_config[0] * 0.003
+    def get_margin_bounds(self, bounds, render_config, amplifier=1):
+        margin = render_config[0] * 0.003 * amplifier
 
         x1, y1, x2, y2 = bounds
 

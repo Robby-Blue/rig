@@ -14,7 +14,10 @@ class RectElement(Element):
         width = x2-x1
         height = y2-y1
 
-        layout_svg = self.get_layout_svg(margin_bounds, render_config)
+        inner_padding = self.option("inner_padding", 0)
+        layout_bounds = self.get_margin_bounds(margin_bounds, render_config, inner_padding)
+
+        layout_svg = self.get_layout_svg(layout_bounds, render_config)
         return [SVGRectElement(self,
             {
                 "x": x1,

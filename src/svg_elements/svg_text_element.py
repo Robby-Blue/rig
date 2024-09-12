@@ -1,14 +1,15 @@
 from PIL import ImageFont
 from svg_writer import SVGElement
 
-fnt = ImageFont.truetype("Pillow/Tests/fonts/DejaVuSans.ttf", 20)
-
 class SVGTextElement(SVGElement):
 
     def __init__(self, src, attributes, children=None):
         super().__init__("text", src, attributes, children)
 
     def render(self, img):
+        font_size = self.get("font-size")
+        font = ImageFont.truetype("Pillow/Tests/fonts/DejaVuSans.ttf", font_size)
+
         x = self.get("x")
         y = self.get("y")
         text = self.children[0]
@@ -26,5 +27,8 @@ class SVGTextElement(SVGElement):
 
         img.text((x, y),
             text,
-            font=fnt,
-            anchor=anchor_x+anchor_y)
+            font=font,
+            anchor=anchor_x+anchor_y,
+            fill=self.get("fill"),
+            stroke_fill=self.get("stroke"),
+            stroke_width=self.get("stroke-width")*2)

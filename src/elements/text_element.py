@@ -42,7 +42,12 @@ class TextElement(Element):
                 "y": y1,
                 "text-anchor": text_anchor,
                 "dy": dy,
-                "fill": self.option("color", "#FFFFFF")
+                "fill": self.option("color", "#FFFFFF"),
+                "font-size": self.option("font-size", 20),
+                "stroke": self.option("stroke", "#000000"),
+                "stroke-width": self.option("stroke-width", 1),
+                "font-family": "Arial",
+                "font-weight": "bold"
             },
             [self.option("text")])
 
