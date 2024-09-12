@@ -36,6 +36,8 @@ class CircleElement(Element):
             *layout_svg]
     
     def get_orientation(self, bounds):
+        if self.option("size_type", "") == "rel_abs":
+            return "h"
         if self.option("orientation", "") == "h":
             return "h"
         if self.option("orientation", "") == "v":
@@ -62,22 +64,27 @@ class CircleElement(Element):
         x1, y1, x2, y2 = bounds
         orientation = self.get_orientation((x1, y1, x2, y2))
 
+        total_width = (x2-x1)
+        total_height = (y2-y1)
+
+        size_type = self.option("size_type", "rel_parent")
+
         if orientation == "h":
-            total_width = (x2-x1)
             percent_width = self.option("width")
             width = total_width * percent_width
 
-            total_height = (y2-y1)
             percent_height = width / total_height
-            return [percent_width, percent_height]
+            if size_type == "rel_abs":
+                percent_width *= self.root().option("width") / total_width
         elif orientation == "v":
-            total_height = (y2-y1)
             percent_height = self.option("height")
             height = total_height * percent_height
 
-            total_width = (x2-x1)
             percent_width = height / total_width
-            return [percent_width, percent_height]
+            if size_type == "rel_abs":
+                percent_height *= self.root().option("height") / total_height
+
+        return [percent_width, percent_height]
 
     def get_name(self=None):
         return "circle"
