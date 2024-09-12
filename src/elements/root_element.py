@@ -13,7 +13,7 @@ class RootElement(Element):
         
         layout_svg = self.get_layout_svg(bounds, render_config)
 
-        return SVGRootElement(
+        return SVGRootElement(self,
             {
                 "height": self.get_height(),
                 "width": self.get_width(),

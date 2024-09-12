@@ -5,8 +5,8 @@ fnt = ImageFont.truetype("Pillow/Tests/fonts/DejaVuSans.ttf", 20)
 
 class SVGTextElement(SVGElement):
 
-    def __init__(self, attributes, children=None):
-        super().__init__("text", attributes, children)
+    def __init__(self, src, attributes, children=None):
+        super().__init__("text", src, attributes, children)
 
     def render(self, img):
         x = self.get("x")

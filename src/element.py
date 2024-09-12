@@ -2,9 +2,11 @@ class Element():
 
     options = {}
     parent = None
+    layer = 0
 
     def __init__(self, **kwargs):
         self.options = kwargs
+        self.layer = self.option("layer", 0)
 
         self.layout = None
         self.children = []

@@ -2,7 +2,8 @@ from html import escape
 
 class SVGElement():
 
-    def __init__(self, tag, attributes, children=None):
+    def __init__(self, tag, src, attributes, children=None):
+        self.src = src
         self.tag = tag
 
         self.attributes = attributes
@@ -10,7 +11,8 @@ class SVGElement():
             children = [children]
 
         self.children = children
-
+        self.children.sort(key=lambda x: x.src.layer if isinstance(x, SVGElement) else 0)
+        
     def render(self, img):
         pass
 
@@ -40,6 +42,3 @@ class SVGElement():
             return f"<{self.tag}{attributes_str} />"
         else:
             return f"<{self.tag}{attributes_str}>{inner}</{self.tag}>"
-
-def svg(attrs, children=None):
-    return SVGElement("svg", attrs, children)

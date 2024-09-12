@@ -26,7 +26,7 @@ class CircleElement(Element):
         y = (y1+y2)/2
         
         layout_svg = self.get_layout_svg(margin_bounds, render_config)
-        return [SVGCircleElement(
+        return [SVGCircleElement(self,
             {
                 "r": size,
                 "cx": x,

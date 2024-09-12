@@ -36,7 +36,7 @@ class TextElement(Element):
             _, y1, _, _ = self.get_margin_bounds(bounds, render_config)
             dy = "1em"
 
-        svg_element = SVGTextElement(
+        svg_element = SVGTextElement(self,
             {
                 "x": x1,
                 "y": y1,

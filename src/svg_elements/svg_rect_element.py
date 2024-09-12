@@ -2,8 +2,8 @@ from svg_writer import SVGElement
 
 class SVGRectElement(SVGElement):
 
-    def __init__(self, attributes, children=None):
-        super().__init__("rect", attributes, children)
+    def __init__(self, src, attributes, children=None):
+        super().__init__("rect", src, attributes, children)
 
     def render(self, img):
         x1 = self.get("x")

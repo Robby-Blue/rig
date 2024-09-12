@@ -15,7 +15,7 @@ class RectElement(Element):
         height = y2-y1
 
         layout_svg = self.get_layout_svg(margin_bounds, render_config)
-        return [SVGRectElement(
+        return [SVGRectElement(self,
             {
                 "x": x1,
                 "y": y1,
