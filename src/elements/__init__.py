@@ -2,6 +2,7 @@ from elements.root_element import RootElement
 from elements.rect_element import RectElement
 from elements.circle_element import CircleElement
 from elements.text_element import TextElement
+from elements.line_element import LineElement
 from elements.container_element import ContainerElement
 
 types = [
@@ -9,6 +10,7 @@ types = [
     RectElement,
     CircleElement,
     TextElement,
+    LineElement,
     ContainerElement
 ]
 

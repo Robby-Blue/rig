@@ -3,8 +3,6 @@ from svg_elements import SVGTextElement
 
 class TextElement(Element):
     def __init__(self, **kwargs):
-        kwargs["height"] = 0
-        kwargs["width"] = 0
         super().__init__(**kwargs)
 
     def to_svg(self, bounds):
@@ -52,6 +50,9 @@ class TextElement(Element):
             [self.option("text")])
 
         return [svg_element]
+    
+    def get_size(self, bounds=None):
+        return [0, 0]
     
     def get_name(self=None):
         return "text"
