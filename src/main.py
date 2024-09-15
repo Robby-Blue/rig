@@ -5,9 +5,24 @@ from elements import get_element_contructor
 from layouts import get_layout_contructor
 from renderer import svg_renderer
 
-def read_element(src):
+def read_element(src, templates, variables):
+    src = dict(src)
     element_type_name = src["type"]
-    element_type = get_element_contructor(element_type_name)
+
+    for key, val in src.items():
+        if not isinstance(val, dict):
+            continue
+        if val["type"] != "arg":
+            continue
+        src[key] = variables[val["name"]]
+
+    if element_type_name == "template":
+        template_name = src["name"]
+        template = dict(templates[template_name])
+        variables = src
+        return read_element(template, templates, variables)
+    else:
+        element_type = get_element_contructor(element_type_name)
 
     element = element_type(**src)
 
@@ -20,7 +35,7 @@ def read_element(src):
 
         element.set_layout(layout)
         for child in src["children"]:
-            element.add_child(read_element(child))
+            element.add_child(read_element(child, templates, variables))
     return element
 
 def main():
@@ -35,7 +50,7 @@ def main():
     with open(input_file, "r") as f:
         src = json.load(f)
 
-    svg_element = read_element(src)
+    svg_element = read_element(src["main"], src, {})
     svg = svg_element.to_svg()
 
     if output_file.endswith("svg"):
