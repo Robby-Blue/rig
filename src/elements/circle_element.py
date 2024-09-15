@@ -31,7 +31,9 @@ class CircleElement(Element):
                 "r": size,
                 "cx": x,
                 "cy": y,
-                "fill": self.option("color", "black")
+                "fill": self.option("color", "#00000000"),
+                "stroke": self.option("stroke", "#FFFFFF"),
+                "stroke-width": self.root().option("width")//300
             }),
             *layout_svg]
     

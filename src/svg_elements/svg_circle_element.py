@@ -11,4 +11,6 @@ class SVGCircleElement(SVGElement):
         y = self.get("cy")
         img.circle((x, y),
             radius=self.get("r"),
-            fill=self.get("fill"))
+            fill=self.get("fill"),
+            outline=self.get("stroke"),
+            width=self.get("stroke-width"))
