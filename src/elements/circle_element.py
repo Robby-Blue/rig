@@ -1,6 +1,8 @@
 from element import Element
 from svg_elements import SVGCircleElement
 
+from utils import hex_rgba_to_rgba_alpha
+
 class CircleElement(Element):
     def __init__(self, **kwargs):
         if "size" in kwargs:
@@ -25,15 +27,20 @@ class CircleElement(Element):
         x = (x1+x2)/2
         y = (y1+y2)/2
         
+        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#00000000"))
+        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("stroke", "#FFFFFF"))
+
         layout_svg = self.get_layout_svg(margin_bounds)
         return [SVGCircleElement(self,
             {
                 "r": size,
                 "cx": x,
                 "cy": y,
-                "fill": self.option("color", "#00000000"),
-                "stroke": self.option("stroke", "#FFFFFF"),
-                "stroke-width": self.root().option("width")//300
+                "fill": fill_color,
+                "fill-opacity": fill_opacity,
+                "stroke": stroke_color,
+                "stroke-width": self.root().option("width")//300,
+                "stroke-opacity": stroke_opacity
             }),
             *layout_svg]
     

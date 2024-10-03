@@ -1,6 +1,8 @@
 from element import Element
 from svg_elements import SVGRectElement
 
+from utils import hex_rgba_to_rgba_alpha
+
 class RectElement(Element):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -17,6 +19,9 @@ class RectElement(Element):
         inner_padding = self.option("inner_padding", 0)
         layout_bounds = self.get_margin_bounds(margin_bounds, inner_padding)
 
+        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#00000000"))
+        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("stroke", "#FFFFFF"))
+
         layout_svg = self.get_layout_svg(layout_bounds)
         return [SVGRectElement(self,
             {
@@ -26,9 +31,11 @@ class RectElement(Element):
                 "height": height,
                 "rx": border_radius,
                 "ry": border_radius,
-                "fill": self.option("color", "#00000000"),
-                "stroke": self.option("stroke", "#FFFFFF"),
-                "stroke-width": self.root().option("width")//300
+                "fill": fill_color,
+                "fill-opacity": fill_opacity,
+                "stroke": stroke_color,
+                "stroke-width": self.root().option("width")//300,
+                "stroke-opacity": stroke_opacity
             }),
             *layout_svg]
     

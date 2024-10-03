@@ -1,6 +1,8 @@
 from PIL import ImageFont
 from svg_writer import SVGElement
 
+from utils import rgba_alpha_to_hex
+
 class SVGTextElement(SVGElement):
 
     def __init__(self, src, attributes, children=None):
@@ -26,11 +28,13 @@ class SVGTextElement(SVGElement):
             anchor_y = "b"
 
         stroke_width = int(self.get("stroke-width"))
-
+        fill_color = rgba_alpha_to_hex(self.get("fill"), self.get("fill-opacity"))
+        stroke_color = rgba_alpha_to_hex(self.get("stroke"), self.get("stroke-opacity"))
+        
         img.text((x, y),
             text,
             font=font,
             anchor=anchor_x+anchor_y,
-            fill=self.get("fill"),
-            stroke_fill=self.get("stroke"),
+            fill=fill_color,
+            stroke_fill=stroke_color,
             stroke_width=stroke_width)

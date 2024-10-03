@@ -1,6 +1,8 @@
 from element import Element
 from svg_elements import SVGLineElement
 
+from utils import hex_rgba_to_rgba_alpha
+
 class LineElement(Element):
     def __init__(self, **kwargs):
         if "width" in kwargs:
@@ -19,6 +21,8 @@ class LineElement(Element):
 
         x1, y1, x2, y2 = bounds
 
+        color, opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
+
         layout_svg = self.get_layout_svg(bounds)
         return [SVGLineElement(self,
             {
@@ -26,7 +30,8 @@ class LineElement(Element):
                 "y1": y1,
                 "x2": x2,
                 "y2": y2,
-                "stroke": self.option("color", "#FFFFFF"),
+                "stroke": color,
+                "stroke-opacity": opacity,
                 "stroke-width": width
             }),
             *layout_svg]
