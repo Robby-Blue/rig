@@ -34,6 +34,8 @@ class TextElement(Element):
             _, y1, _, _ = self.get_margin_bounds(bounds)
             dy = "1em"
 
+        width_multiplier = self.root().option("width") / 700
+
         svg_element = SVGTextElement(self,
             {
                 "x": x1,
@@ -41,9 +43,9 @@ class TextElement(Element):
                 "text-anchor": text_anchor,
                 "dy": dy,
                 "fill": self.option("color", "#FFFFFF"),
-                "font-size": self.option("font-size", 20),
+                "font-size": int(self.option("font-size", 20) * width_multiplier),
                 "stroke": self.option("stroke", "#000000"),
-                "stroke-width": self.option("stroke-width", 1),
+                "stroke-width": int(self.option("stroke-width", 1.3) * width_multiplier),
                 "font-family": "Arial",
                 "font-weight": "bold"
             },
