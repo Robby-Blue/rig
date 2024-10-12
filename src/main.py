@@ -9,7 +9,8 @@ from renderer import svg_renderer
 
 def parse(src):
     tokens = language.tokenize(src)
-    print(json.dumps(tokens, indent=2))
+    ast = language.parse(tokens)
+    print(json.dumps(ast, indent=2))
     sys.exit(0)
 
 def read_element(src, templates, variables):

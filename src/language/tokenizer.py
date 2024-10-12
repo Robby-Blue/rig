@@ -4,12 +4,12 @@ keywords = [
 ]
 
 char_tokens = {
-    "{": "OPEN_CURLY_BRACKET",
-    "}": "CLOSE_CURLY_BRACKET",
-    "(": "OPEN_BRACKET",
-    ")": "CLOSE_BRACKET",
-    ":": "COLON",
-    ",": "COMMA"
+    "{": "open_curly_bracket",
+    "}": "close_curly_bracket",
+    "(": "open_bracket",
+    ")": "close_bracket",
+    ":": "colon",
+    ",": "comma"
 }
 
 def tokenize(src):
