@@ -39,7 +39,7 @@ class TextElement(Element):
         width_multiplier = self.root().option("width") / 700
 
         fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
-        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("stroke", "#000000"))
+        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("outline", "#000000"))
 
         svg_element = SVGTextElement(self,
             {

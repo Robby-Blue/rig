@@ -19,8 +19,8 @@ class RectElement(Element):
         inner_padding = self.option("inner_padding", 0)
         layout_bounds = self.get_margin_bounds(margin_bounds, inner_padding)
 
-        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#00000000"))
-        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("stroke", "#FFFFFF"))
+        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("fill_color", "#00000000"))
+        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
 
         layout_svg = self.get_layout_svg(layout_bounds)
         return [SVGRectElement(self,

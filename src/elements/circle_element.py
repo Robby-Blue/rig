@@ -27,8 +27,8 @@ class CircleElement(Element):
         x = (x1+x2)/2
         y = (y1+y2)/2
         
-        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#00000000"))
-        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("stroke", "#FFFFFF"))
+        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("fill_color", "#00000000"))
+        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
 
         layout_svg = self.get_layout_svg(margin_bounds)
         return [SVGCircleElement(self,
