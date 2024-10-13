@@ -25,6 +25,8 @@ def tokenize(src):
             token, idx = read_string(src, idx)
         elif char.isdigit():
             token, idx = read_number(src, idx)
+        elif char == "#":
+            token, idx = read_hex(src, idx)
         else:
             if char in char_tokens:
                 token = {"type": char_tokens[char]}
@@ -66,4 +68,17 @@ def read_number(src, idx):
     return {
         "type": "number",
         "value": int(num_str)
+    }, idx-1
+
+def read_hex(src, idx):
+    hex_digits = "0123456789ABCDEF"
+
+    idx += 1
+    start_idx = idx
+    while src[idx] in hex_digits:
+        idx += 1
+    hex_str = src[start_idx:idx]
+    return {
+        "type": "hex",
+        "value": hex_str
     }, idx-1

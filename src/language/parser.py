@@ -148,7 +148,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
 
 def parse_arg(tokens, idx):
     value_token = tokens[idx]
-    assert_type(value_token, ["string", "number", "identifier"])
+    assert_type(value_token, ["string", "number", "hex", "identifier"])
 
     # implement objects later
     if value_token["type"] == "string":
@@ -157,6 +157,11 @@ def parse_arg(tokens, idx):
             "value": value_token["text"]
         }
     if value_token["type"] == "number":
+        value = {
+            "type": "value",
+            "value": value_token["value"]
+        }
+    if value_token["type"] == "hex":
         value = {
             "type": "value",
             "value": value_token["value"]
