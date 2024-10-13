@@ -65,5 +65,5 @@ def read_number(src, idx):
     num_str = src[start_idx:idx]
     return {
         "type": "number",
-        "text": int(num_str)
+        "value": int(num_str)
     }, idx-1

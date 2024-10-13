@@ -35,9 +35,7 @@ def parse(tokens):
     return ast
 
 def parse_import(tokens, idx):
-    idx += 1
-
-    identifier_token = tokens[idx]
+    identifier_token, idx = read_token(tokens, idx)
     assert_type(identifier_token, "identifier")
 
     return {
@@ -46,25 +44,25 @@ def parse_import(tokens, idx):
     }, idx
 
 def parse_definition(tokens, idx):
-    idx += 1
-    identifier_token = tokens[idx]
+    identifier_token, idx = read_token(tokens, idx)
     assert_type(identifier_token, "identifier")
     name = identifier_token["text"]
 
     # either 'def fig {' or 'def fig('
-    idx += 1
-    bracket_token = tokens[idx]
+    bracket_token, idx = read_token(tokens, idx)
     assert_type(bracket_token, ["open_bracket", "open_curly_bracket"])
     bracket_type = bracket_token["type"]
 
-    args = []
+    args = {}
 
     if bracket_type == "open_bracket":
-        idx += 1
+        args, idx = parse_args(tokens, idx+1, False)
+        args = args["pos_args"]
+
         assert_type(tokens[idx], ["close_bracket"])
-        idx += 1
-        bracket_token = tokens[idx]
-    
+        bracket_token, idx = read_token(tokens, idx)
+        bracket_type = bracket_token["type"]
+
     assert_type(bracket_token, ["open_curly_bracket"])
 
     children = []
@@ -72,9 +70,7 @@ def parse_definition(tokens, idx):
     if bracket_type == "open_curly_bracket":
         idx += 1
         while tokens[idx]["type"] != "close_curly_bracket":
-            assert_type(tokens[idx], ["identifier"])
-            child, idx = parse_object(tokens, idx)
-            children.append(child)
+            children, idx = parse_children(tokens, idx)
 
     return {
         "type": "define_statement",
@@ -83,31 +79,100 @@ def parse_definition(tokens, idx):
         "children": children
     }, idx
 
-def parse_object(tokens, idx):
+def parse_children(tokens, idx):
+    children = []
+    while tokens[idx]["type"] != "close_curly_bracket":
+        assert_type(tokens[idx], ["identifier"])
+        child, idx = parse_component(tokens, idx)
+        children.append(child)
+        idx += 1
+
+    return children, idx
+
+def parse_component(tokens, idx):
     identifier_token = tokens[idx]
     name = identifier_token["text"]
 
-    idx += 1
-    assert_type(tokens[idx], ["open_bracket"])
+    open_token, idx = read_token(tokens, idx)
+    assert_type(open_token, ["open_bracket"])
 
-    idx += 1
-    assert_type(tokens[idx], ["close_bracket"])
+    args, idx = parse_args(tokens, idx+1)
 
-    args = []
     children = []
 
-    idx += 1
-    if tokens[idx]["type"] == "open_curly_bracket":
-        idx += 1
-        while tokens[idx]["type"] != "close_curly_bracket":
-            assert_type(tokens[idx], ["identifier"])
-            child, idx = parse_object(tokens, idx)
-            children.append(child)
-        idx += 1
+    if tokens[idx+1]["type"] == "open_curly_bracket":
+        idx += 2
+        children, idx = parse_children(tokens, idx)
+        assert_type(tokens[idx], "close_curly_bracket")
 
     return {
-        "type": "object_call",
+        "type": "component_call",
         "name": name,
         "args": args,
         "children": children
     }, idx
+
+def parse_args(tokens, idx, allow_kwargs=True):
+    pos_args = []
+    kwargs = {}
+
+    while tokens[idx]["type"] != "close_bracket":
+        assert_type(tokens[idx], ["identifier", "number", "string"])
+
+        is_identifier = tokens[idx]["type"] == "identifier"
+        colon_follows = tokens[idx+1]["type"] == "colon"
+        is_kwarg = is_identifier and colon_follows
+
+        if is_kwarg and allow_kwargs:
+            arg_name = tokens[idx]["text"]
+            colon_token, idx = read_token(tokens, idx)
+            assert_type(colon_token, ["colon"])
+
+            value, idx = parse_arg(tokens, idx+1)
+
+            kwargs[arg_name] = value
+        else:
+            value, idx = parse_arg(tokens, idx)
+            pos_args.append(value)
+
+        next_token, idx = read_token(tokens, idx)
+        assert_type(next_token, ["close_bracket", "comma"])
+
+        if next_token["type"] == "comma":
+            idx += 1
+
+    return {
+        "pos_args": pos_args,
+        "kwargs": kwargs
+    }, idx
+
+def parse_arg(tokens, idx):
+    value_token = tokens[idx]
+    assert_type(value_token, ["string", "number", "identifier"])
+
+    # implement objects later
+    if value_token["type"] == "string":
+        value = {
+            "type": "value",
+            "value": value_token["text"]
+        }
+    if value_token["type"] == "number":
+        value = {
+            "type": "value",
+            "value": value_token["value"]
+        }
+    if value_token["type"] == "identifier":
+        # either a variable or a component like a layout
+        if tokens[idx+1]["type"] == "open_bracket":
+            value, idx = parse_component(tokens, idx)
+        else:
+            value = {
+                "type": "variable",
+                "name": value_token["text"]
+            }
+
+    return value, idx
+
+def read_token(tokens, idx):
+    idx += 1
+    return tokens[idx], idx
