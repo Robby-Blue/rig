@@ -19,7 +19,7 @@ def assert_type(token, expected_types, message=None):
             return
     
     if not message:
-        message = f"Expected to find {expected_types}, found {actual_type}"
+        message = f"expected to find {expected_types}, found {actual_type}"
     else:
         message = message.format(actual_type)
 
@@ -57,10 +57,10 @@ def parse(tokens):
 def parse_import(tokens, idx):
     identifier_token, idx = read_token(tokens, idx)
     assert_not_type(identifier_token, "string",
-"Expected name of file to import, found string",
+"expected name of file to import, found string",
 lambda: identifier_token["text"])
     assert_type(identifier_token, "identifier",
-"Expected name of file to import, found {}")
+"expected name of file to import, found {}")
 
     return {
         "type": "import_statement",
@@ -70,7 +70,7 @@ lambda: identifier_token["text"])
 def parse_definition(tokens, idx):
     identifier_token, idx = read_token(tokens, idx)
     assert_type(identifier_token, "identifier",
-"Expected name of component, found {}")
+"expected name of component, found {}")
     name = identifier_token["text"]
 
     # either 'def fig {' or 'def fig('
@@ -108,7 +108,7 @@ def parse_children(tokens, idx):
     children = []
     while tokens[idx]["type"] != "close_curly_bracket":
         assert_type(tokens[idx], ["identifier"],
-"Expected component, found {}")
+"expected component, found {}")
         child, idx = parse_component(tokens, idx)
         children.append(child)
         idx += 1
@@ -144,7 +144,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
 
     while tokens[idx]["type"] != "close_bracket":
         assert_type(tokens[idx], ["identifier", "number", "string"],
-"Expected value or variable name, found {}")
+"expected value or variable name, found {}")
 
         is_identifier = tokens[idx]["type"] == "identifier"
         colon_follows = tokens[idx+1]["type"] == "colon"
@@ -176,7 +176,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
 def parse_arg(tokens, idx):
     value_token = tokens[idx]
     assert_type(value_token, ["string", "number", "hex", "identifier"],
-"Expected value, found {}")
+"expected value, found {}")
 
     # implement objects later
     if value_token["type"] == "string":
