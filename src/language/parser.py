@@ -1,4 +1,5 @@
 from language.syntax_exception import BadSyntaxException
+from language.tokenizer import char_tokens
 
 def assert_not_type(token, not_expected_type, message, code_fix):
     actual_type = token["type"]
@@ -19,11 +20,28 @@ def assert_type(token, expected_types, message=None):
             return
     
     if not message:
-        message = f"expected to find {expected_types}, found {actual_type}"
+        message = f"expected to find {format_types(expected_types)}, found {actual_type}"
     else:
         message = message.format(actual_type)
 
     raise BadSyntaxException(token["start_index"], token["end_index"], message)
+
+def format_types(types):
+    types = [
+        format_type(type) for type in types
+    ]
+
+    if len(types) == 1:
+        return types[0]
+    else:
+        return ", ".join(types[:-1]) + " or " + types[-1]
+
+def format_type(type):
+    if type in list(char_tokens.values()):
+        idx = list(char_tokens.values()).index(type)
+        char = list(char_tokens.keys())[idx]
+        return f"'{char}'"
+    return type
 
 def parse(tokens):
     ast = []
