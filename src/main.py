@@ -7,12 +7,6 @@ from elements import get_element_contructor
 from layouts import get_layout_contructor
 from renderer import svg_renderer
 
-def parse(src):
-    tokens = language.tokenize(src)
-    ast = language.parse(tokens)
-    print(json.dumps(ast, indent=2))
-    sys.exit(0)
-
 def read_element(src, templates, variables):
     src = dict(src)
     element_type_name = src["type"]
@@ -55,11 +49,12 @@ def main():
     input_file = sys.argv[1]
     output_file = sys.argv[2]
 
-    with open(input_file, "r") as f:
-        if input_file.endswith(".json"):
+    if input_file.endswith(".json"):
+        with open(input_file, "r") as f:
             src = json.load(f)
-        if input_file.endswith(".rig"):
-            src = parse(f.read())
+    if input_file.endswith(".rig"):
+        src = language.compile(input_file)
+        sys.exit(0)
 
     svg_element = read_element(src["main"], src, {})
     svg = svg_element.to_svg()

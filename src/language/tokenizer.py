@@ -32,7 +32,8 @@ def tokenize(src):
                 token = {"type": char_tokens[char]}
 
         if token:
-            token["index"] = start_idx
+            token["start_index"] = start_idx
+            token["end_index"] = idx
             tokens.append(token)
         idx += 1
     return tokens

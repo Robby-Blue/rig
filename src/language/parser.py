@@ -1,6 +1,15 @@
 from language.syntax_exception import BadSyntaxException
 
-def assert_type(token, expected_types):
+def assert_not_type(token, not_expected_type, message, code_fix):
+    actual_type = token["type"]
+
+    if actual_type != not_expected_type:
+        return
+
+    raise BadSyntaxException(token["start_index"], token["end_index"],
+        message, code_fix())
+
+def assert_type(token, expected_types, message=None):
     actual_type = token["type"]
     if isinstance(expected_types, str):
         expected_types = [expected_types]
@@ -9,8 +18,12 @@ def assert_type(token, expected_types):
         if actual_type == expected_type:
             return
     
-    raise BadSyntaxException(token["index"], 
-        f"Expected to find {expected_types}, found {actual_type}")
+    if not message:
+        message = f"Expected to find {expected_types}, found {actual_type}"
+    else:
+        message = message.format(actual_type)
+
+    raise BadSyntaxException(token["start_index"], token["end_index"], message)
 
 def parse(tokens):
     ast = []
@@ -43,7 +56,11 @@ def parse(tokens):
 
 def parse_import(tokens, idx):
     identifier_token, idx = read_token(tokens, idx)
-    assert_type(identifier_token, "identifier")
+    assert_not_type(identifier_token, "string",
+"Expected name of file to import, found string",
+lambda: identifier_token["text"])
+    assert_type(identifier_token, "identifier",
+"Expected name of file to import, found {}")
 
     return {
         "type": "import_statement",
@@ -52,7 +69,8 @@ def parse_import(tokens, idx):
 
 def parse_definition(tokens, idx):
     identifier_token, idx = read_token(tokens, idx)
-    assert_type(identifier_token, "identifier")
+    assert_type(identifier_token, "identifier",
+"Expected name of component, found {}")
     name = identifier_token["text"]
 
     # either 'def fig {' or 'def fig('
@@ -89,7 +107,8 @@ def parse_definition(tokens, idx):
 def parse_children(tokens, idx):
     children = []
     while tokens[idx]["type"] != "close_curly_bracket":
-        assert_type(tokens[idx], ["identifier"])
+        assert_type(tokens[idx], ["identifier"],
+"Expected component, found {}")
         child, idx = parse_component(tokens, idx)
         children.append(child)
         idx += 1
@@ -124,7 +143,8 @@ def parse_args(tokens, idx, allow_kwargs=True):
     kwargs = {}
 
     while tokens[idx]["type"] != "close_bracket":
-        assert_type(tokens[idx], ["identifier", "number", "string"])
+        assert_type(tokens[idx], ["identifier", "number", "string"],
+"Expected value or variable name, found {}")
 
         is_identifier = tokens[idx]["type"] == "identifier"
         colon_follows = tokens[idx+1]["type"] == "colon"
@@ -155,7 +175,8 @@ def parse_args(tokens, idx, allow_kwargs=True):
 
 def parse_arg(tokens, idx):
     value_token = tokens[idx]
-    assert_type(value_token, ["string", "number", "hex", "identifier"])
+    assert_type(value_token, ["string", "number", "hex", "identifier"],
+"Expected value, found {}")
 
     # implement objects later
     if value_token["type"] == "string":
