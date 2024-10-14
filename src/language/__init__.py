@@ -11,7 +11,11 @@ def compile(file):
 
         try:
             tokens = tokenize(src)
-            ast = parse(tokens)
+            try:
+                ast = parse(tokens)
+            except IndexError:
+                raise BadSyntaxException(len(src)-1, len(src)+1,
+                    "Unexpected EOF")
             print(json.dumps(ast, indent=2))
         except BadSyntaxException as e:
             print_error(e, src, file)
@@ -30,7 +34,7 @@ def print_error(error, src, file):
     end_index = error.end_index
 
     line_start_index = src.rindex("\n", 0, start_index) + 1
-    line_end_index = src.index("\n", start_index)
+    line_end_index = (src+"\n").index("\n", start_index)
 
     orig_line = src[line_start_index:line_end_index]
     line = orig_line.lstrip()
@@ -46,7 +50,7 @@ def print_error(error, src, file):
     relative_end_index = end_index - line_start_index
     token_length = end_index - start_index + 1
 
-    prefix = f"  | "
+    prefix = " " * len(str(line_number)) + " | "
     line_prefix = f"{line_number} | "
 
     print(f"{red}error:{reset} bad syntax in '{file}', line {line_number}")
