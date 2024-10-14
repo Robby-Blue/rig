@@ -16,6 +16,8 @@ def parse(tokens):
     ast = []
     idx = 0
 
+    imports_done = False
+
     while idx < len(tokens):
         node = None
         token = tokens[idx]
@@ -24,8 +26,13 @@ def parse(tokens):
         
         keyword = token["text"]
         if keyword == "import":
+            if imports_done:
+                raise BadSyntaxException(token["index"], 
+"Can't have import after definition")
+
             node, idx = parse_import(tokens, idx)
         if keyword == "def":
+            imports_done = True
             node, idx = parse_definition(tokens, idx)
 
         if node:
