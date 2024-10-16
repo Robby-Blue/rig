@@ -1,9 +1,15 @@
 from elements import get_element_contructor
 from layouts import get_layout_contructor
+import language
+import os
 
 def generate_ir(ast):
     ir = {}
     definitions = {}
+
+    for node in ast:
+        if node["type"] == "import_statement":
+            import_file(node, ast)
 
     for node in ast:
         if node["type"] == "define_statement":
@@ -11,12 +17,26 @@ def generate_ir(ast):
             definitions[name] = args
 
     for node in ast:
-        if node["type"] == "import_statement":
-            raise NotImplementedError()
         if node["type"] == "define_statement":
             transpile_definition(node, ir, definitions)
 
     return ir
+
+def import_file(import_call, ast):
+    base_name = import_call["source"]
+    file_names = [base_name, f"{base_name}.rig"]
+
+    found_name = None
+
+    for file_name in file_names:
+        if os.path.isfile(file_name):
+            found_name = file_name
+
+    if not found_name:
+        return # TODO add errors later
+
+    _, new_ast = language.file_to_ast(found_name)
+    ast += new_ast
 
 def definition_get_args(definition_node):
     component_name = definition_node["name"]

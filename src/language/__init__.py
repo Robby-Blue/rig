@@ -6,6 +6,15 @@ from language.syntax_exception import BadSyntaxException
 import sys
 
 def compile(file):
+    src, ast = file_to_ast(file)
+    try:
+        ir = generate_ir(ast)
+        return ir
+    except BadSyntaxException as e:
+        print_error(e, src, file)
+        sys.exit(1)
+
+def file_to_ast(file):
     with open(file, "r") as f:
         src = f.read()
 
@@ -16,8 +25,7 @@ def compile(file):
             except IndexError:
                 raise BadSyntaxException(len(src)-1, len(src)+1,
                     "Unexpected EOF")
-            ir = generate_ir(ast)
-            return ir
+            return src, ast
         except BadSyntaxException as e:
             print_error(e, src, file)
             sys.exit(1)

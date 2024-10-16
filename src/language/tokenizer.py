@@ -13,6 +13,8 @@ char_tokens = {
 }
 
 def tokenize(src):
+    src += " "
+
     tokens = []
     idx = 0
     while idx < len(src):
