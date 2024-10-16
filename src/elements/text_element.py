@@ -11,13 +11,13 @@ class TextElement(Element):
         x1, y1, _, _ = bounds
         
         align_h = "right"
-        if self.option("center_h", False) == True:
+        if self.option("center_h", False):
             align_h = "center"
         if self.has_option("align_text_h"):
             align_h = self.option("align_text_h", "")
 
         align_v = "bottom"
-        if self.option("center_v", False) == True:
+        if self.option("center_v", False):
             align_v = "center"
         if self.has_option("align_text_v"):
             align_v = self.option("align_text_v", "")
@@ -49,10 +49,10 @@ class TextElement(Element):
                 "dy": dy,
                 "fill": fill_color,
                 "fill-opacity": fill_opacity,
-                "font-size": int(self.option("font-size", 20) * width_multiplier),
+                "font-size": int(self.option("font_size", 20) * width_multiplier),
                 "stroke": stroke_color,
                 "stroke-opacity": stroke_opacity,
-                "stroke-width": int(self.option("stroke-width", 1.3) * width_multiplier),
+                "stroke-width": int(self.option("stroke_width", 1.3) * width_multiplier),
                 "font-family": "Arial",
                 "font-weight": "bold"
             },
@@ -65,3 +65,10 @@ class TextElement(Element):
     
     def get_name(self=None):
         return "text"
+    
+    def get_args():
+        return {
+            "allowed": ["x", "y", "width", "height", "layout", "center_h", "align_text_h", "center_v", "align_text_v", "width", "color", "outline", "font_size", "stroke-width", "text"],
+            "positional": ["text", "x", "y"],
+            "required": ["text"]
+        }

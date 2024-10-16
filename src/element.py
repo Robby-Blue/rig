@@ -70,3 +70,6 @@ class Element():
     
     def has_option(self, key):
         return key in self.options
+    
+    def get_args():
+        return None

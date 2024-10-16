@@ -9,3 +9,6 @@ class Layout(Element):
 
     def set_parent(self, parent):
         self.parent = parent
+
+    def get_args():
+        return None

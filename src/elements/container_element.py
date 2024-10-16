@@ -10,3 +10,10 @@ class ContainerElement(Element):
     
     def get_name(self=None):
         return "container"
+    
+    def get_args():
+        return {
+            "allowed": ["x", "y", "width", "height", "layout"],
+            "positional": ["x", "y", "width", "height"],
+            "required": []
+        }

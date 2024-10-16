@@ -23,3 +23,10 @@ class RootElement(Element):
     
     def get_name(self=None):
         return "svg"
+    
+    def get_args():
+        return {
+            "allowed": ["width", "height", "layout"],
+            "positional": ["width", "height"],
+            "required": []
+        }

@@ -54,9 +54,8 @@ def main():
             src = json.load(f)
     if input_file.endswith(".rig"):
         src = language.compile(input_file)
-        sys.exit(0)
 
-    svg_element = read_element(src["main"], src, {})
+    svg_element = read_element(src["fig"], src, {})
     svg = svg_element.to_svg()
 
     if output_file.endswith("svg"):

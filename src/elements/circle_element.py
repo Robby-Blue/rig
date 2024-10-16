@@ -97,3 +97,10 @@ class CircleElement(Element):
 
     def get_name(self=None):
         return "circle"
+    
+    def get_args():
+        return {
+            "allowed": ["layout", "fill_color", "color", "width", "size_type", "orientation", "size", "height"],
+            "positional": ["x", "y", "size", "color"],
+            "required": []
+        }

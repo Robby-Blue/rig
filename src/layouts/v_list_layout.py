@@ -37,3 +37,10 @@ class VListLayout(Layout):
     
     def get_name(self=None):
         return "vlist"
+    
+    def get_args():
+        return {
+            "allowed": [],
+            "positional": [],
+            "required": []
+        }

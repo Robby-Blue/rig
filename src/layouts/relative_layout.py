@@ -42,3 +42,10 @@ class RelativeLayout(Layout):
     
     def get_name(self=None):
         return "relative"
+    
+    def get_args():
+        return {
+            "allowed": [],
+            "positional": [],
+            "required": []
+        }

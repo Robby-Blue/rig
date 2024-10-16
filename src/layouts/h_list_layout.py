@@ -37,3 +37,10 @@ class HListLayout(Layout):
     
     def get_name(self=None):
         return "hlist"
+    
+    def get_args():
+        return {
+            "allowed": [],
+            "positional": [],
+            "required": []
+        }

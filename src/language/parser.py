@@ -100,7 +100,6 @@ def parse_definition(tokens, idx):
 
     if bracket_type == "open_bracket":
         args, idx = parse_args(tokens, idx+1, False)
-        args = args["pos_args"]
 
         assert_type(tokens[idx], ["close_bracket"])
         bracket_token, idx = read_token(tokens, idx)
@@ -157,8 +156,8 @@ def parse_component(tokens, idx):
     }, idx
 
 def parse_args(tokens, idx, allow_kwargs=True):
-    pos_args = []
-    kwargs = {}
+    args = []
+    had_keyword_arg = False
 
     while tokens[idx]["type"] != "close_bracket":
         assert_type(tokens[idx], ["identifier", "number", "string"],
@@ -174,11 +173,18 @@ def parse_args(tokens, idx, allow_kwargs=True):
             assert_type(colon_token, ["colon"])
 
             value, idx = parse_arg(tokens, idx+1)
-
-            kwargs[arg_name] = value
+            value["keyword"] = arg_name
+            args.append(value)
+            had_keyword_arg = True
         else:
+            start_idx = tokens[idx]["start_index"]
             value, idx = parse_arg(tokens, idx)
-            pos_args.append(value)
+            args.append(value)
+
+            if had_keyword_arg:
+                end_idx = tokens[idx]["end_index"]
+                raise BadSyntaxException(start_idx, end_idx,
+                    "can't use position arg after keyword arg")
 
         next_token, idx = read_token(tokens, idx)
         assert_type(next_token, ["close_bracket", "comma"])
@@ -186,10 +192,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
         if next_token["type"] == "comma":
             idx += 1
 
-    return {
-        "pos_args": pos_args,
-        "kwargs": kwargs
-    }, idx
+    return args, idx
 
 def parse_arg(tokens, idx):
     value_token = tokens[idx]
@@ -218,7 +221,7 @@ def parse_arg(tokens, idx):
             value, idx = parse_component(tokens, idx)
         else:
             value = {
-                "type": "variable",
+                "type": "arg",
                 "name": value_token["text"]
             }
 

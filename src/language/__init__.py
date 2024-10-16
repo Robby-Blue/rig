@@ -1,8 +1,8 @@
 from language.tokenizer import tokenize
 from language.parser import parse
+from language.ir_generator import generate_ir
 from language.syntax_exception import BadSyntaxException
 
-import json
 import sys
 
 def compile(file):
@@ -16,9 +16,11 @@ def compile(file):
             except IndexError:
                 raise BadSyntaxException(len(src)-1, len(src)+1,
                     "Unexpected EOF")
-            print(json.dumps(ast, indent=2))
+            ir = generate_ir(ast)
+            return ir
         except BadSyntaxException as e:
             print_error(e, src, file)
+            sys.exit(1)
 
 def print_error(error, src, file):
     red = "\x1b[1;34;31m"

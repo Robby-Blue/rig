@@ -40,7 +40,7 @@ def tokenize(src):
 
 def read_identifier(src, idx):
     start_idx = idx
-    while src[idx].isalpha():
+    while src[idx].isalpha() or src[idx] == "_":
         idx += 1
     text = src[start_idx:idx]
     return {
@@ -50,6 +50,8 @@ def read_identifier(src, idx):
 
 def read_string(src, idx):
     # TODO improve this to handle escapes
+    # TODO detect and raise unclosed strings
+    # and other tokens
     idx += 1
     start_idx = idx
     while src[idx] != "\"":

@@ -24,4 +24,6 @@ def hex_rgba_to_rgba_alpha(hex_str):
     raise ValueError(f"Bad color {hex_str}")
 
 def rgba_alpha_to_hex(rgb_str, opacity):
+    if rgb_str[0] == "#":
+        rgb_str = rgb_str[1:]
     return "#" + rgb_str + "{:02X}".format(int(opacity*255))
