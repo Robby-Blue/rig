@@ -1,5 +1,6 @@
 from elements import get_element_contructor
 from layouts import get_layout_contructor
+from language.compile_exception import CompileException
 import language
 import os
 
@@ -33,7 +34,8 @@ def import_file(import_call, ast):
             found_name = file_name
 
     if not found_name:
-        return # TODO add errors later
+        raise CompileException("FileError", import_call["token"],
+    "file to import not found")
 
     _, new_ast = language.file_to_ast(found_name)
     ast += new_ast
@@ -55,7 +57,8 @@ def transpile_definition(definition_node, ir, definitions):
         children_ir.append(transpile_component(child_node, definitions))
 
     if len(children_ir) > 1:
-        return # TODO add errors later
+        raise CompileException("ComponentError", definition_node["token"],
+            "can't have multiple components in the root")
 
     ir[component_name] = children_ir[0]
 
@@ -72,7 +75,8 @@ def transpile_component(component_node, definitions):
         args = component.get_args()
     else:
         if not component_name in definitions:
-            return # TODO add errors later
+            raise CompileException("UnknownComponentError", component_node["token"],
+    "called component is not defined")
         defined_args = definitions[component_name]
         args = {
             "allowed": defined_args,
@@ -82,7 +86,7 @@ def transpile_component(component_node, definitions):
         ir["type"] = "template"
         ir["name"] = component_name
 
-    args_ir = transpile_args(component_node["args"], args)
+    args_ir = transpile_args(component_node, args)
     for k, v in args_ir.items():
         ir[k] = v
    
@@ -91,7 +95,9 @@ def transpile_component(component_node, definitions):
 
     return ir
 
-def transpile_args(ast_args, component_args):
+def transpile_args(parent_node, component_args):
+    ast_args = parent_node["args"]
+
     args_ir = {}
 
     for i, arg in enumerate(ast_args):
@@ -99,14 +105,16 @@ def transpile_args(ast_args, component_args):
             keyword = arg["keyword"]
         else:
             if i >= len(component_args["positional"]):
-                return # TODO add errors later
+                raise CompileException("ArgumentError", arg["pos"],
+    "too many args given")
             keyword = component_args["positional"][i]
         if keyword not in component_args["allowed"]:
-            return # TODO add errors later
+            raise CompileException("ArgumentError", arg["keyword_token"],
+    "keyword argument not allowed for component")
         if keyword in args_ir.keys():
-            return # TODO add errors later
+            raise CompileException("ArgumentError", arg["keyword_token"],
+    "keyword argument already given before")
 
-        # TODO add support for layout
         if arg["type"] == "value":
             args_ir[keyword] = arg["value"]
         elif arg["type"] == "arg":
@@ -116,7 +124,8 @@ def transpile_args(ast_args, component_args):
 
     for required_arg in component_args["required"]:
         if required_arg not in args_ir:
-            return # TODO add errors later
+            raise CompileException("ArgumentError", parent_node["token"],
+    f"required argument {required_arg} not given")
 
     return args_ir
 
@@ -131,7 +140,7 @@ def transpile_arg_component(ast_arg_component):
         return
     args = component.get_args()
 
-    args_ir = transpile_args(ast_arg_component["args"], args)
+    args_ir = transpile_args(ast_arg_component, args)
 
     for k, v in args_ir.items():
         ir[k] = v

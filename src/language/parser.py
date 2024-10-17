@@ -1,4 +1,4 @@
-from language.syntax_exception import BadSyntaxException
+from language.compile_exception import CompileException
 from language.tokenizer import char_tokens
 
 def assert_not_type(token, not_expected_type, message, code_fix):
@@ -7,7 +7,7 @@ def assert_not_type(token, not_expected_type, message, code_fix):
     if actual_type != not_expected_type:
         return
 
-    raise BadSyntaxException(token["start_index"], token["end_index"],
+    raise CompileException("SyntaxError", token,
         message, code_fix())
 
 def assert_type(token, expected_types, message=None):
@@ -24,7 +24,7 @@ def assert_type(token, expected_types, message=None):
     else:
         message = message.format(actual_type)
 
-    raise BadSyntaxException(token["start_index"], token["end_index"], message)
+    raise CompileException("SyntaxError", token, message)
 
 def format_types(types):
     types = [
@@ -58,7 +58,7 @@ def parse(tokens):
         keyword = token["text"]
         if keyword == "import":
             if imports_done:
-                raise BadSyntaxException(token["index"], 
+                raise CompileException("ArgumentError", token, 
 "Can't have import after definition")
 
             node, idx = parse_import(tokens, idx)
@@ -82,6 +82,7 @@ lambda: identifier_token["text"])
 
     return {
         "type": "import_statement",
+        "token": identifier_token,
         "source": identifier_token["text"]
     }, idx
 
@@ -116,6 +117,7 @@ def parse_definition(tokens, idx):
 
     return {
         "type": "define_statement",
+        "token": identifier_token,
         "name": name,
         "args": args,
         "children": children
@@ -150,6 +152,7 @@ def parse_component(tokens, idx):
 
     return {
         "type": "component_call",
+        "token": identifier_token,
         "name": name,
         "args": args,
         "children": children
@@ -160,7 +163,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
     had_keyword_arg = False
 
     while tokens[idx]["type"] != "close_bracket":
-        assert_type(tokens[idx], ["identifier", "number", "string"],
+        assert_type(tokens[idx], ["identifier", "number", "string", "hex"],
 "expected value or variable name, found {}")
 
         is_identifier = tokens[idx]["type"] == "identifier"
@@ -168,22 +171,25 @@ def parse_args(tokens, idx, allow_kwargs=True):
         is_kwarg = is_identifier and colon_follows
 
         if is_kwarg and allow_kwargs:
-            arg_name = tokens[idx]["text"]
+            identifier_token = tokens[idx]
+            arg_name = identifier_token["text"]
             colon_token, idx = read_token(tokens, idx)
             assert_type(colon_token, ["colon"])
 
             value, idx = parse_arg(tokens, idx+1)
             value["keyword"] = arg_name
+            value["keyword_token"] = identifier_token
             args.append(value)
             had_keyword_arg = True
         else:
             start_idx = tokens[idx]["start_index"]
             value, idx = parse_arg(tokens, idx)
+            end_idx = tokens[idx]["end_index"]
+            value["pos"] = (start_idx, end_idx)
             args.append(value)
 
             if had_keyword_arg:
-                end_idx = tokens[idx]["end_index"]
-                raise BadSyntaxException(start_idx, end_idx,
+                raise CompileException("ArgumentError", (start_idx, end_idx),
                     "can't use position arg after keyword arg")
 
         next_token, idx = read_token(tokens, idx)

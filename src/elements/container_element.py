@@ -13,7 +13,7 @@ class ContainerElement(Element):
     
     def get_args():
         return {
-            "allowed": ["x", "y", "width", "height", "layout"],
+            "allowed": ["x", "y", "layer", "width", "height", "layout"],
             "positional": ["x", "y", "width", "height"],
             "required": []
         }

@@ -41,7 +41,7 @@ class LineElement(Element):
     
     def get_args():
         return {
-            "allowed": ["x1", "y1", "x2", "y1", "width", "line_width", "color", "layout"],
+            "allowed": ["x1", "y1", "x2", "y1", "width", "layer", "line_width", "color", "layout"],
             "positional": ["x1", "y1", "x2", "y1", "color"],
             "required": ["x1", "y1", "x2", "y2"]
         }

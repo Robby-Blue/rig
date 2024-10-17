@@ -68,7 +68,7 @@ class TextElement(Element):
     
     def get_args():
         return {
-            "allowed": ["x", "y", "width", "height", "layout", "center_h", "align_text_h", "center_v", "align_text_v", "width", "color", "outline", "font_size", "stroke-width", "text"],
+            "allowed": ["x", "y", "layer", "width", "height", "layout", "center_h", "align_text_h", "center_v", "align_text_v", "width", "color", "outline", "font_size", "stroke-width", "text"],
             "positional": ["text", "x", "y"],
             "required": ["text"]
         }

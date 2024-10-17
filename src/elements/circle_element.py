@@ -100,7 +100,7 @@ class CircleElement(Element):
     
     def get_args():
         return {
-            "allowed": ["layout", "fill_color", "color", "width", "size_type", "orientation", "size", "height"],
+            "allowed": ["x", "y", "layer", "layout", "fill_color", "color", "width", "size_type", "orientation", "size", "height"],
             "positional": ["x", "y", "size", "color"],
             "required": []
         }

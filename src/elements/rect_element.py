@@ -44,7 +44,7 @@ class RectElement(Element):
     
     def get_args():
         return {
-            "allowed": ["x", "y", "width", "height", "inner_padding", "fill_color", "color", "layout"],
+            "allowed": ["x", "y", "width", "height", "layer", "inner_padding", "fill_color", "color", "layout"],
             "positional": ["x", "y", "width", "height", "color"],
             "required": []
         }

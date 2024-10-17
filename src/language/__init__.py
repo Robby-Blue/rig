@@ -1,7 +1,7 @@
 from language.tokenizer import tokenize
 from language.parser import parse
 from language.ir_generator import generate_ir
-from language.syntax_exception import BadSyntaxException
+from language.compile_exception import CompileException
 
 import sys
 
@@ -10,23 +10,25 @@ def compile(file):
     try:
         ir = generate_ir(ast)
         return ir
-    except BadSyntaxException as e:
+    except CompileException as e:
         print_error(e, src, file)
         sys.exit(1)
 
 def file_to_ast(file):
     with open(file, "r") as f:
-        src = f.read()
+        src = "\n" + f.read()
 
         try:
             tokens = tokenize(src)
             try:
                 ast = parse(tokens)
             except IndexError:
-                raise BadSyntaxException(len(src)-1, len(src)+1,
+                start = tokens[-1]["end_index"] - 1
+                end = tokens[-1]["end_index"] + 1
+                raise CompileException("SyntaxError", (start, end),
                     "Unexpected EOF")
             return src, ast
-        except BadSyntaxException as e:
+        except CompileException as e:
             print_error(e, src, file)
             sys.exit(1)
 
@@ -54,7 +56,7 @@ def print_error(error, src, file):
     start_index -= left_stripped
     end_index -= left_stripped
 
-    line_number = src[0:line_start_index].count("\n") + 1
+    line_number = src[0:line_start_index].count("\n")
 
     relative_start_index = start_index - line_start_index
     relative_end_index = end_index - line_start_index
@@ -63,7 +65,7 @@ def print_error(error, src, file):
     prefix = " " * len(str(line_number)) + " | "
     line_prefix = f"{line_number} | "
 
-    print(f"{red}error:{reset} bad syntax in '{file}', line {line_number}")
+    print(f"{red}error:{reset} {error.type} in '{file}', line {line_number}")
     print(prefix)
     print(line_prefix + line)
     print(prefix + make_arrows(relative_start_index, token_length, red) + reset)
