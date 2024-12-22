@@ -1,11 +1,13 @@
+from PIL import Image, ImageDraw
+
 import sys
 import json
 
 import language
 
+from svg_writer import SVGElement
 from components import get_component_contructor
 from layouts import get_layout_contructor
-from renderer import svg_renderer
 
 def read_component(src, templates, variables):
     src = dict(src)
@@ -56,14 +58,34 @@ def main():
         src = language.compile(input_file)
 
     root_component = read_component(src["fig"], src, {})
-    svg = root_component.to_svg()
+    intermediate = root_component.to_intermediate()
+    intermediate["children"].sort(key=lambda x: x.src.layer)
 
     if output_file.endswith("svg"):
+        svg_code = to_svg(intermediate)
         with open(output_file, "w") as f:
-            f.write(str(svg))
+            f.write(svg_code)
     if output_file.endswith("png"):
-        img = svg_renderer.render(svg)
+        img = to_bitmap(intermediate)
         img.save(output_file)
+
+def to_svg(intermediate):
+    root_children = [c.to_svg() for c in intermediate["children"]]
+    root = SVGElement("svg", {
+        "width": intermediate["width"],
+        "height": intermediate["height"],
+        "xmlns": "http://www.w3.org/2000/svg"
+    }, root_children)
+    return str(root)
+
+def to_bitmap(intermediate):
+    img = Image.new(mode="RGBA", size=(intermediate["width"], intermediate["height"]))
+    draw = ImageDraw.Draw(img)
+
+    for element in intermediate["children"]:
+        element.draw(draw)
+    
+    return img
 
 if __name__ == "__main__":
     main()

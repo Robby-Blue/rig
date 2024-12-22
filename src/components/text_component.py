@@ -1,5 +1,5 @@
 from component import Component
-from svg_elements import SVGTextElement
+from intermediates import IntermediateText
 
 from utils import hex_rgba_to_rgba_alpha
 
@@ -7,7 +7,7 @@ class TextComponent(Component):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds):
+    def to_intermediate(self, bounds):
         x1, y1, _, _ = bounds
         
         align_h = "right"
@@ -23,7 +23,7 @@ class TextComponent(Component):
             align_v = self.option("align_text_v", "")
 
         text_anchor = "middle"
-        dy = "0.25em"
+        align_vertical = "center"
         # normally youd use dominant-baseline,
         # but that doesnt work everywhere
 
@@ -34,29 +34,27 @@ class TextComponent(Component):
             text_anchor = "end"
         if align_v == "bottom":
             _, y1, _, _ = self.get_margin_bounds(bounds)
-            dy = "1em"
+            align_vertical = "bottom"
 
         width_multiplier = self.root().option("width") / 700
 
         fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
         stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("outline", "#000000"))
 
-        svg_element = SVGTextElement(self,
+        svg_element = IntermediateText(self,
             {
+                "text": self.option("text"),
                 "x": x1,
                 "y": y1,
                 "text-anchor": text_anchor,
-                "dy": dy,
-                "fill": fill_color,
+                "align_vertical": align_vertical,
+                "fill-color": fill_color,
                 "fill-opacity": fill_opacity,
                 "font-size": self.option("font_size", 1) * 20 * width_multiplier,
-                "stroke": stroke_color,
+                "stroke-color": stroke_color,
                 "stroke-opacity": stroke_opacity,
                 "stroke-width": self.option("stroke_width", 1.3) * width_multiplier,
-                "font-family": "Arial",
-                "font-weight": "bold"
-            },
-            [self.option("text")])
+            })
 
         return [svg_element]
     

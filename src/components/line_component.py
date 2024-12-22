@@ -1,5 +1,5 @@
 from component import Component
-from svg_elements import SVGLineElement
+from intermediates import IntermediateLine
 
 from utils import hex_rgba_to_rgba_alpha
 
@@ -15,7 +15,7 @@ class LineComponent(Component):
 
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds):
+    def to_intermediate(self, bounds):
         base_width = self.root().option("width") * 0.005
         width = self.option("line_width", 1) * base_width
 
@@ -23,18 +23,18 @@ class LineComponent(Component):
 
         color, opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
 
-        layout_svg = self.get_layout_svg(bounds)
-        return [SVGLineElement(self,
+        layout_intermediates = self.get_layout_intermediates(bounds)
+        return [IntermediateLine(self,
             {
                 "x1": x1,
                 "y1": y1,
                 "x2": x2,
                 "y2": y2,
-                "stroke": color,
-                "stroke-opacity": opacity,
-                "stroke-width": width
+                "color": color,
+                "opacity": opacity,
+                "width": width
             }),
-            *layout_svg]
+            *layout_intermediates]
 
     def get_name(self=None):
         return "line"

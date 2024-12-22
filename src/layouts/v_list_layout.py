@@ -5,7 +5,7 @@ class VListLayout(Layout):
         super().__init__(**kwargs)
         # whether and how theres lines between the components like borders
 
-    def to_svg(self, bounds):
+    def to_intermediate(self, bounds):
         x1, y1, x2, y2 = bounds
         percent_height = (y2-y1) / 100
 
@@ -21,7 +21,7 @@ class VListLayout(Layout):
         
         height_left = (y2-y1)-total_height
 
-        svg_children = []
+        children = []
 
         for child in self.parent.children:
             if child.has_option("height"):
@@ -29,11 +29,11 @@ class VListLayout(Layout):
             else:
                 height = height_left / unset_components
             child_bounds = (x1, pos_y, x2, pos_y+height)
-            svg_children += child.to_svg(child_bounds)
+            children += child.to_intermediate(child_bounds)
 
             pos_y+=height
 
-        return svg_children
+        return children
     
     def get_name(self=None):
         return "vlist"

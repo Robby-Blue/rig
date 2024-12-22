@@ -5,7 +5,7 @@ class HListLayout(Layout):
         super().__init__(**kwargs)
         # whether and how theres lines between the components like borders
 
-    def to_svg(self, bounds):
+    def to_intermediate(self, bounds):
         x1, y1, x2, y2 = bounds
         percent_width = (x2-x1) / 100
 
@@ -21,7 +21,7 @@ class HListLayout(Layout):
         
         width_left = (x2-x1)-total_width
 
-        svg_children = []
+        children = []
 
         for child in self.parent.children:
             if child.has_option("width"):
@@ -29,11 +29,11 @@ class HListLayout(Layout):
             else:
                 width = width_left / unset_components
             child_bounds = (pos_x, y1, pos_x+width, y2)
-            svg_children += child.to_svg(child_bounds)
+            children += child.to_intermediate(child_bounds)
 
             pos_x+=width
 
-        return svg_children
+        return children
     
     def get_name(self=None):
         return "hlist"

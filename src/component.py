@@ -22,15 +22,15 @@ class Component():
         layout.set_parent(self)
         self.layout = layout
 
-    def get_layout_svg(self, bounds):
+    def get_layout_intermediates(self, bounds):
         if not self.children:
             return []
         if not self.layout:
             from layouts import VListLayout
             self.set_layout(VListLayout())
-        return self.layout.to_svg(bounds)
+        return self.layout.to_intermediate(bounds)
 
-    def to_svg(bounds):
+    def to_intermediate(bounds):
         return []
 
     def get_margin_bounds(self, bounds, amplifier=1):
