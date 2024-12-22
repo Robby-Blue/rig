@@ -76,7 +76,7 @@ def read_number(src, idx):
     }, idx-1
 
 def read_hex(src, idx):
-    hex_digits = "0123456789ABCDEF"
+    hex_digits = "0123456789ABCDEFabcdefg"
 
     idx += 1
     start_idx = idx

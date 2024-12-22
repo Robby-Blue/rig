@@ -15,7 +15,7 @@ class SVGCircleElement(SVGElement):
         stroke_color = rgba_alpha_to_hex(self.get("stroke"), self.get("stroke-opacity"))
 
         img.circle((x, y),
-            radius=self.get("r"),
+            radius=int(self.get("r")),
             fill=fill_color,
             outline=stroke_color,
-            width=self.get("stroke-width"))
+            width=int(self.get("stroke-width")))

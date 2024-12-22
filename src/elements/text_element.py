@@ -49,10 +49,10 @@ class TextElement(Element):
                 "dy": dy,
                 "fill": fill_color,
                 "fill-opacity": fill_opacity,
-                "font-size": int(self.option("font_size", 20) * width_multiplier),
+                "font-size": self.option("font_size", 1) * 20 * width_multiplier,
                 "stroke": stroke_color,
                 "stroke-opacity": stroke_opacity,
-                "stroke-width": int(self.option("stroke_width", 1.3) * width_multiplier),
+                "stroke-width": self.option("stroke_width", 1.3) * width_multiplier,
                 "font-family": "Arial",
                 "font-weight": "bold"
             },

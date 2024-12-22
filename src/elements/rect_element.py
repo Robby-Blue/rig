@@ -34,7 +34,7 @@ class RectElement(Element):
                 "fill": fill_color,
                 "fill-opacity": fill_opacity,
                 "stroke": stroke_color,
-                "stroke-width": self.root().option("width")//300,
+                "stroke-width": self.root().option("width")/300,
                 "stroke-opacity": stroke_opacity
             }),
             *layout_svg]

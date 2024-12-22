@@ -19,5 +19,5 @@ class SVGRectElement(SVGElement):
         img.rounded_rectangle((x1, y1, x2, y2),
             fill=fill_color,
             outline=stroke_color,
-            width=self.get("stroke-width"),
-            radius=self.get("rx"))
+            width=int(self.get("stroke-width")),
+            radius=int(self.get("rx")))

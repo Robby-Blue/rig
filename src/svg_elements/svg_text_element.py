@@ -18,16 +18,18 @@ class SVGTextElement(SVGElement):
 
         if self.get("text-anchor") == "middle":
             anchor_x = "m"
-        elif self.get("text-anchor") == "left":
+        elif self.get("text-anchor") == "start":
             anchor_x = "l"
-        elif self.get("text-anchor") == "right":
+        elif self.get("text-anchor") == "end":
             anchor_x = "r"
 
-        anchor_y = "m"
+        anchor_y = "b"
+        if self.get("dy") == "0.25em":
+            anchor_y = "m"
         if self.get("dy") == "1em":
-            anchor_y = "b"
+            anchor_y = "t"
 
-        stroke_width = int(self.get("stroke-width"))
+        stroke_width = self.get("stroke-width")
         fill_color = rgba_alpha_to_hex(self.get("fill"), self.get("fill-opacity"))
         stroke_color = rgba_alpha_to_hex(self.get("stroke"), self.get("stroke-opacity"))
         
@@ -37,4 +39,4 @@ class SVGTextElement(SVGElement):
             anchor=anchor_x+anchor_y,
             fill=fill_color,
             stroke_fill=stroke_color,
-            stroke_width=stroke_width)
+            stroke_width=int(stroke_width))
