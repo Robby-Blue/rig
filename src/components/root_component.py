@@ -1,7 +1,7 @@
-from element import Element
+from component import Component
 from svg_elements import SVGRootElement
 
-class RootElement(Element):
+class RootComponent(Component):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

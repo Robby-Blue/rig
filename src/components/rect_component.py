@@ -1,9 +1,9 @@
-from element import Element
+from component import Component
 from svg_elements import SVGRectElement
 
 from utils import hex_rgba_to_rgba_alpha
 
-class RectElement(Element):
+class RectComponent(Component):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

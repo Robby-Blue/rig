@@ -3,13 +3,13 @@ import json
 
 import language
 
-from elements import get_element_contructor
+from components import get_component_contructor
 from layouts import get_layout_contructor
 from renderer import svg_renderer
 
-def read_element(src, templates, variables):
+def read_component(src, templates, variables):
     src = dict(src)
-    element_type_name = src["type"]
+    component_type_name = src["type"]
 
     for key, val in src.items():
         if not isinstance(val, dict):
@@ -18,27 +18,27 @@ def read_element(src, templates, variables):
             continue
         src[key] = variables[val["name"]]
 
-    if element_type_name == "template":
+    if component_type_name == "template":
         template_name = src["name"]
         template = dict(templates[template_name])
         variables = src
-        return read_element(template, templates, variables)
+        return read_component(template, templates, variables)
     else:
-        element_type = get_element_contructor(element_type_name)
+        component_type = get_component_contructor(component_type_name)
 
-    element = element_type(**src)
+    component = component_type(**src)
 
     if "children" in src:
-        src_layout = element.option("layout", {"type": "relative"})
+        src_layout = component.option("layout", {"type": "relative"})
         layout_type_name = src_layout["type"]
         layout_type = get_layout_contructor(layout_type_name)
 
         layout = layout_type(**src_layout)
 
-        element.set_layout(layout)
+        component.set_layout(layout)
         for child in src["children"]:
-            element.add_child(read_element(child, templates, variables))
-    return element
+            component.add_child(read_component(child, templates, variables))
+    return component
 
 def main():
     if len(sys.argv) < 3:
@@ -55,8 +55,8 @@ def main():
     if input_file.endswith(".rig"):
         src = language.compile(input_file)
 
-    svg_element = read_element(src["fig"], src, {})
-    svg = svg_element.to_svg()
+    root_component = read_component(src["fig"], src, {})
+    svg = root_component.to_svg()
 
     if output_file.endswith("svg"):
         with open(output_file, "w") as f:

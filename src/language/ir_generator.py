@@ -1,4 +1,4 @@
-from elements import get_element_contructor
+from components import get_component_contructor
 from layouts import get_layout_contructor
 from language.compile_exception import CompileException
 import language
@@ -70,7 +70,7 @@ def transpile_component(component_node, definitions):
         "children": []
     }
 
-    component = get_element_contructor(component_name)
+    component = get_component_contructor(component_name)
     if component:
         args = component.get_args()
     else:

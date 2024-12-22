@@ -3,7 +3,7 @@ from layout import Layout
 class HListLayout(Layout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # whether and how theres lines between the elements like borders
+        # whether and how theres lines between the components like borders
 
     def to_svg(self, bounds):
         x1, y1, x2, y2 = bounds
@@ -12,12 +12,12 @@ class HListLayout(Layout):
         pos_x = x1
 
         total_width = 0
-        unset_elements = 0
+        unset_components = 0
         for child in self.parent.children:
             if child.has_option("width"):
                 total_width += percent_width * child.option("width")
             else:
-                unset_elements += 1
+                unset_components += 1
         
         width_left = (x2-x1)-total_width
 
@@ -27,7 +27,7 @@ class HListLayout(Layout):
             if child.has_option("width"):
                 width = percent_width * child.get_width(bounds)
             else:
-                width = width_left / unset_elements
+                width = width_left / unset_components
             child_bounds = (pos_x, y1, pos_x+width, y2)
             svg_children += child.to_svg(child_bounds)
 

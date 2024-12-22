@@ -1,6 +1,6 @@
-from element import Element
+from component import Component
 
-class ContainerElement(Element):
+class ContainerComponent(Component):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

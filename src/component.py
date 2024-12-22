@@ -1,4 +1,4 @@
-class Element():
+class Component():
 
     options = {}
     parent = None
