@@ -202,21 +202,23 @@ def parse_args(tokens, idx, allow_kwargs=True):
 
 def parse_arg(tokens, idx):
     value_token = tokens[idx]
-    assert_type(value_token, ["string", "number", "hex", "identifier"],
+    assert_type(value_token, ["string", "number", "hex", "boolean", "identifier", "comma", "close_bracket"],
 "expected value, found {}")
 
-    # implement objects later
+    # `identified: ,` is treated as a true
+    if value_token["type"] in ["comma", "close_bracket"]:
+        value = {
+            "type": "value",
+            "value": True
+        }
+        idx -= 1
+
     if value_token["type"] == "string":
         value = {
             "type": "value",
             "value": value_token["text"]
         }
-    if value_token["type"] == "number":
-        value = {
-            "type": "value",
-            "value": value_token["value"]
-        }
-    if value_token["type"] == "hex":
+    if value_token["type"] in ["hex", "number", "boolean"]:
         value = {
             "type": "value",
             "value": value_token["value"]

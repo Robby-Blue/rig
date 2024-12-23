@@ -45,6 +45,13 @@ def read_identifier(src, idx):
     while src[idx].isalpha() or src[idx] == "_":
         idx += 1
     text = src[start_idx:idx]
+
+    if text in ["true", "false"]:
+        return {
+            "type": "boolean",
+            "value": text == "true"
+        }, idx-1 
+
     return {
         "type": "keyword" if text in keywords else "identifier",
         "text": text
