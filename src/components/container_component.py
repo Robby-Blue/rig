@@ -1,12 +1,12 @@
-from element import Element
+from component import Component
 
-class ContainerElement(Element):
+class ContainerComponent(Component):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds):
-        layout_svg = self.get_layout_svg(bounds)
-        return layout_svg
+    def to_intermediate(self, bounds):
+        layout_intermediates = self.get_layout_intermediates(bounds)
+        return layout_intermediates
     
     def get_name(self=None):
         return "container"

@@ -76,14 +76,21 @@ def read_number(src, idx):
     }, idx-1
 
 def read_hex(src, idx):
-    hex_digits = "0123456789ABCDEF"
+    hex_digits = "0123456789ABCDEFabcdefg"
 
     idx += 1
     start_idx = idx
     while src[idx] in hex_digits:
         idx += 1
     hex_str = src[start_idx:idx]
+
+    value = int(hex_str, 16)
+
+    if len(hex_str) == 6:
+        value *= 255
+        value += 255
+
     return {
         "type": "hex",
-        "value": hex_str
+        "value": value
     }, idx-1

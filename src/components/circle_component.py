@@ -1,16 +1,14 @@
-from element import Element
-from svg_elements import SVGCircleElement
+from component import Component
+from intermediates import IntermediateCircle
 
-from utils import hex_rgba_to_rgba_alpha
-
-class CircleElement(Element):
+class CircleComponent(Component):
     def __init__(self, **kwargs):
         if "size" in kwargs:
             kwargs["width"] = kwargs["size"]
             kwargs["height"] = kwargs["size"]
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds):
+    def to_intermediate(self, bounds):
         margin_bounds = self.get_margin_bounds(bounds)
         x1, y1, x2, y2 = margin_bounds
 
@@ -26,23 +24,19 @@ class CircleElement(Element):
         
         x = (x1+x2)/2
         y = (y1+y2)/2
-        
-        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("fill_color", "#00000000"))
-        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
 
-        layout_svg = self.get_layout_svg(margin_bounds)
-        return [SVGCircleElement(self,
+        layout_intermediates = self.get_layout_intermediates(margin_bounds)
+
+        return [IntermediateCircle(self,
             {
-                "r": size,
-                "cx": x,
-                "cy": y,
-                "fill": fill_color,
-                "fill-opacity": fill_opacity,
-                "stroke": stroke_color,
-                "stroke-width": self.root().option("width")//300,
-                "stroke-opacity": stroke_opacity
+                "x": x,
+                "y": y,
+                "radius": size,
+                "fill-color": self.option("fill_color", 0x00),
+                "stroke-color": self.option("color", 0xFFFFFFFF),
+                "stroke-width": self.root().option("width")/300,
             }),
-            *layout_svg]
+            *layout_intermediates]
     
     def get_orientation(self, bounds):
         if self.option("size_type", "") == "rel_abs":

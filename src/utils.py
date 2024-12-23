@@ -3,27 +3,22 @@
 # the color need to be given in RGB with an added
 # 'opacity' field ranging from 0.0 to 1.0 
 
-def hex_rgba_to_rgba_alpha(hex_str):
-    # add some system to allow colors like 'green'
-    # maybe allow users to map names to hex values first
-    # or just print a warning and pass it on with opacity of 1
-    
-    if hex_str[0] == "#":
-        hex_str = hex_str[1:]
+def hex_to_rgba_alpha_str(hex_int):
+    red = (hex_int >> 24) & 0xFF
+    green = (hex_int >> 16) & 0xFF
+    blue = (hex_int >> 8) & 0xFF
+    alpha = hex_int & 0xFF
 
-    if len(hex_str) == 6:
-        return "#"+hex_str, 1
-    if len(hex_str) == 8:
-        return "#"+hex_str[:6], int(hex_str[7:8], 16) / 255
-    
-    # 'orange' doesnt get this far
-    # probably try to hex parse it and if
-    # it fails error too
-    # or trust users to be smart and figure it our
-    # themselves
-    raise ValueError(f"Bad color {hex_str}")
+    rgb_string = f"#{red:02X}{green:02X}{blue:02X}"
 
-def rgba_alpha_to_hex(rgb_str, opacity):
-    if rgb_str[0] == "#":
-        rgb_str = rgb_str[1:]
-    return "#" + rgb_str + "{:02X}".format(int(opacity*255))
+    alpha_float = alpha / 255.0
+
+    return rgb_string, alpha_float
+
+def hex_to_tuple(hex_int):
+    red = (hex_int >> 24) & 0xFF
+    green = (hex_int >> 16) & 0xFF
+    blue = (hex_int >> 8) & 0xFF
+    alpha = hex_int & 0xFF
+
+    return (red, green, blue, alpha)

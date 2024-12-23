@@ -1,9 +1,7 @@
-from element import Element
-from svg_elements import SVGLineElement
+from component import Component
+from intermediates import IntermediateLine
 
-from utils import hex_rgba_to_rgba_alpha
-
-class LineElement(Element):
+class LineComponent(Component):
     def __init__(self, **kwargs):
         if "width" in kwargs:
             kwargs["line_width"] = kwargs["width"]
@@ -15,33 +13,30 @@ class LineElement(Element):
 
         super().__init__(**kwargs)
 
-    def to_svg(self, bounds):
+    def to_intermediate(self, bounds):
         base_width = self.root().option("width") * 0.005
         width = self.option("line_width", 1) * base_width
 
         x1, y1, x2, y2 = bounds
 
-        color, opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
-
-        layout_svg = self.get_layout_svg(bounds)
-        return [SVGLineElement(self,
+        layout_intermediates = self.get_layout_intermediates(bounds)
+        return [IntermediateLine(self,
             {
                 "x1": x1,
                 "y1": y1,
                 "x2": x2,
                 "y2": y2,
-                "stroke": color,
-                "stroke-opacity": opacity,
-                "stroke-width": width
+                "color": self.option("color", 0xFFFFFFFF),
+                "width": width
             }),
-            *layout_svg]
+            *layout_intermediates]
 
     def get_name(self=None):
         return "line"
     
     def get_args():
         return {
-            "allowed": ["x1", "y1", "x2", "y1", "width", "layer", "line_width", "color", "layout"],
-            "positional": ["x1", "y1", "x2", "y1", "color"],
+            "allowed": ["x1", "y1", "x2", "y2", "width", "layer", "line_width", "color", "layout"],
+            "positional": ["x1", "y1", "x2", "y2", "color"],
             "required": ["x1", "y1", "x2", "y2"]
         }

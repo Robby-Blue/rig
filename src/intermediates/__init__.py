@@ -1,0 +1,4 @@
+from intermediates.intermediate_rect import IntermediateRect
+from intermediates.intermediate_circle import IntermediateCircle
+from intermediates.intermediate_line import IntermediateLine
+from intermediates.intermediate_text import IntermediateText

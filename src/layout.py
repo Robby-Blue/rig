@@ -1,6 +1,6 @@
-from element import Element
+from component import Component
 
-class Layout(Element):
+class Layout(Component):
 
     parent = None
 
