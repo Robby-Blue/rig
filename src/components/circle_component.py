@@ -1,8 +1,6 @@
 from component import Component
 from intermediates import IntermediateCircle
 
-from utils import hex_rgba_to_rgba_alpha
-
 class CircleComponent(Component):
     def __init__(self, **kwargs):
         if "size" in kwargs:
@@ -26,9 +24,6 @@ class CircleComponent(Component):
         
         x = (x1+x2)/2
         y = (y1+y2)/2
-        
-        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("fill_color", "#00000000"))
-        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
 
         layout_intermediates = self.get_layout_intermediates(margin_bounds)
 
@@ -37,11 +32,9 @@ class CircleComponent(Component):
                 "x": x,
                 "y": y,
                 "radius": size,
-                "fill-color": fill_color,
-                "fill-opacity": fill_opacity,
-                "stroke-color": stroke_color,
+                "fill-color": self.option("fill_color", 0x00),
+                "stroke-color": self.option("color", 0xFFFFFFFF),
                 "stroke-width": self.root().option("width")/300,
-                "stroke-opacity": stroke_opacity
             }),
             *layout_intermediates]
     

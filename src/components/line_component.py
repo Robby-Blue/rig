@@ -1,8 +1,6 @@
 from component import Component
 from intermediates import IntermediateLine
 
-from utils import hex_rgba_to_rgba_alpha
-
 class LineComponent(Component):
     def __init__(self, **kwargs):
         if "width" in kwargs:
@@ -21,8 +19,6 @@ class LineComponent(Component):
 
         x1, y1, x2, y2 = bounds
 
-        color, opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
-
         layout_intermediates = self.get_layout_intermediates(bounds)
         return [IntermediateLine(self,
             {
@@ -30,8 +26,7 @@ class LineComponent(Component):
                 "y1": y1,
                 "x2": x2,
                 "y2": y2,
-                "color": color,
-                "opacity": opacity,
+                "color": self.option("color", 0xFFFFFFFF),
                 "width": width
             }),
             *layout_intermediates]

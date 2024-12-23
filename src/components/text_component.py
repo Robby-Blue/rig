@@ -1,8 +1,6 @@
 from component import Component
 from intermediates import IntermediateText
 
-from utils import hex_rgba_to_rgba_alpha
-
 class TextComponent(Component):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -38,9 +36,6 @@ class TextComponent(Component):
 
         width_multiplier = self.root().option("width") / 700
 
-        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
-        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("outline", "#000000"))
-
         svg_element = IntermediateText(self,
             {
                 "text": self.option("text"),
@@ -48,11 +43,9 @@ class TextComponent(Component):
                 "y": y1,
                 "text-anchor": text_anchor,
                 "align_vertical": align_vertical,
-                "fill-color": fill_color,
-                "fill-opacity": fill_opacity,
+                "fill-color": self.option("color", 0xFFFFFFFF),
                 "font-size": self.option("font_size", 1) * 20 * width_multiplier,
-                "stroke-color": stroke_color,
-                "stroke-opacity": stroke_opacity,
+                "stroke-color": self.option("outline", 0x000000FF),
                 "stroke-width": self.option("stroke_width", 1.3) * width_multiplier,
             })
 

@@ -1,8 +1,6 @@
 from component import Component
 from intermediates import IntermediateRect
 
-from utils import hex_rgba_to_rgba_alpha
-
 class RectComponent(Component):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -19,9 +17,6 @@ class RectComponent(Component):
         inner_padding = self.option("inner_padding", 0)
         layout_bounds = self.get_margin_bounds(margin_bounds, inner_padding)
 
-        fill_color, fill_opacity = hex_rgba_to_rgba_alpha(self.option("fill_color", "#00000000"))
-        stroke_color, stroke_opacity = hex_rgba_to_rgba_alpha(self.option("color", "#FFFFFF"))
-
         layout_intermediates = self.get_layout_intermediates(layout_bounds)
         return [IntermediateRect(self,
             {
@@ -30,11 +25,9 @@ class RectComponent(Component):
                 "width": width,
                 "height": height,
                 "border-radius": border_radius,
-                "fill-color": fill_color,
-                "fill-opacity": fill_opacity,
-                "stroke-color": stroke_color,
+                "fill-color": self.option("fill_color", 0x00),
+                "stroke-color": self.option("color", 0xFFFFFFFF),
                 "stroke-width": self.root().option("width")/300,
-                "stroke-opacity": stroke_opacity
             }),
             *layout_intermediates]
     

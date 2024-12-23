@@ -83,7 +83,14 @@ def read_hex(src, idx):
     while src[idx] in hex_digits:
         idx += 1
     hex_str = src[start_idx:idx]
+
+    value = int(hex_str, 16)
+
+    if len(hex_str) == 6:
+        value *= 255
+        value += 255
+
     return {
         "type": "hex",
-        "value": hex_str
+        "value": value
     }, idx-1

@@ -1,11 +1,14 @@
 from intermediate import IntermediateElement
 from svg_writer import SVGElement
-from utils import rgba_alpha_to_hex
+from utils import hex_to_rgba_alpha_str, hex_to_tuple
 from PIL import ImageFont
 
 class IntermediateText(IntermediateElement):
 
     def to_svg(self):
+        fill_color, fill_opacity = hex_to_rgba_alpha_str(self.get("fill-color"))
+        stroke_color, stroke_opacity = hex_to_rgba_alpha_str(self.get("stroke-color"))
+
         align_vertical = self.get("align_vertical")
         dy = "0.25em"
         if align_vertical == "bottom":
@@ -17,11 +20,11 @@ class IntermediateText(IntermediateElement):
                 "y": self.get("y"),
                 "text-anchor": self.get("text-anchor"),
                 "dy": dy,
-                "fill": self.get("fill-color"),
-                "fill-opacity": self.get("fill-opacity"),
+                "fill": fill_color,
+                "fill-opacity": fill_opacity,
                 "font-size": self.get("font-size"),
-                "stroke": self.get("stroke-color"),
-                "stroke-opacity": self.get("stroke-opacity"),
+                "stroke": stroke_color,
+                "stroke-opacity": stroke_opacity,
                 "stroke-width": self.get("stroke-width"),
                 "font-family": "Arial",
                 "font-weight": "bold"
@@ -50,13 +53,11 @@ class IntermediateText(IntermediateElement):
             anchor_y = "t"
 
         stroke_width = self.get("stroke-width")
-        fill_color = rgba_alpha_to_hex(self.get("fill-color"), self.get("fill-opacity"))
-        stroke_color = rgba_alpha_to_hex(self.get("stroke-color"), self.get("stroke-opacity"))
-        
+
         img.text((x, y),
             text,
             font=font,
             anchor=anchor_x+anchor_y,
-            fill=fill_color,
-            stroke_fill=stroke_color,
+            fill=hex_to_tuple(self.get("fill-color")),
+            stroke_fill=hex_to_tuple(self.get("stroke-color")),
             stroke_width=int(stroke_width))
