@@ -6,12 +6,17 @@ class RelativeLayout(Layout):
 
     def to_intermediate(self, bounds):
         x1, y1, x2, y2 = bounds
-        percent_width = (x2-x1) / 100
-        percent_height = (y2-y1) / 100
 
         children = []
 
         for child in self.parent.children:
+            # the width/height are in percent, so such that the
+            # actual container takes up 100%, the container+one width
+            # (bc if its normal 100 the left most point is) has to
+            # be 100 + width in percent
+            percent_width = (x2-x1) / (100+child.get_width(bounds))
+            percent_height = (y2-y1) / (100+child.get_height(bounds))
+
             dx = percent_width * child.option("x", 0)
             dy = percent_height * child.option("y", 0)
             
