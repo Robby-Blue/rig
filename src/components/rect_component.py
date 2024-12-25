@@ -24,7 +24,7 @@ class RectComponent(Component):
                 "y": y1,
                 "width": width,
                 "height": height,
-                "border-radius": border_radius,
+                "border-radius": self.option("border_radius", 1) * border_radius,
                 "fill-color": self.option("fill_color", 0x00),
                 "stroke-color": self.option("color", 0xFFFFFFFF),
                 "stroke-width": self.root().option("width")/300,
@@ -36,7 +36,7 @@ class RectComponent(Component):
     
     def get_args():
         return {
-            "allowed": ["x", "y", "width", "height", "layer", "inner_padding", "fill_color", "color", "layout"],
+            "allowed": ["x", "y", "width", "height", "layer", "inner_padding", "fill_color", "color", "layout", "border_radius"],
             "positional": ["x", "y", "width", "height", "color"],
             "required": []
         }

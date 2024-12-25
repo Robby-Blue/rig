@@ -46,7 +46,7 @@ class TextComponent(Component):
                 "fill-color": self.option("color", 0xFFFFFFFF),
                 "font-size": self.option("font_size", 1) * 20 * width_multiplier,
                 "stroke-color": self.option("outline", 0x000000FF),
-                "stroke-width": self.option("stroke_width", 1.3) * width_multiplier,
+                "stroke-width": self.option("stroke_width", 1) * width_multiplier,
             })
 
         return [svg_element]
@@ -59,7 +59,7 @@ class TextComponent(Component):
     
     def get_args():
         return {
-            "allowed": ["x", "y", "layer", "width", "height", "layout", "center_h", "align_text_h", "center_v", "align_text_v", "width", "color", "outline", "font_size", "stroke-width", "text"],
+            "allowed": ["x", "y", "layer", "width", "height", "layout", "center_h", "align_text_h", "center_v", "align_text_v", "width", "color", "outline", "font_size", "stroke_width", "text"],
             "positional": ["text", "x", "y"],
             "required": ["text"]
         }

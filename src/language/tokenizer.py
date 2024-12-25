@@ -94,8 +94,8 @@ def read_hex(src, idx):
     value = int(hex_str, 16)
 
     if len(hex_str) == 6:
-        value *= 255
-        value += 255
+        value = value << 8
+        value = value | 0xFF
 
     return {
         "type": "hex",
