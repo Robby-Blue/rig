@@ -163,7 +163,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
     had_keyword_arg = False
 
     while tokens[idx]["type"] != "close_bracket":
-        assert_type(tokens[idx], ["identifier", "number", "string", "hex"],
+        assert_type(tokens[idx], ["identifier", "number", "string", "hex", "open_bracket"],
 "expected value or variable name, found {}")
 
         is_identifier = tokens[idx]["type"] == "identifier"
@@ -248,7 +248,7 @@ def parse_expression(tokens, idx):
                 break
             output_queue.append(token)
         elif token["type"] in operators:
-            while len(operators_stack) > 0 and operators_stack[-1] in operators:
+            while len(operators_stack) > 0 and operators_stack[-1]["type"] in operators:
                 output_queue.append(operators_stack[-1])
                 operators_stack.pop()
             operators_stack.append(token)
