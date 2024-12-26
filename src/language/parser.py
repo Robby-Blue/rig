@@ -55,7 +55,7 @@ def parse(tokens):
         
         assert_type(token, "keyword")
         
-        keyword = token["text"]
+        keyword = token["name"]
         if keyword == "import":
             if imports_done:
                 raise CompileException("ArgumentError", token, 
@@ -76,21 +76,21 @@ def parse_import(tokens, idx):
     identifier_token, idx = read_token(tokens, idx)
     assert_not_type(identifier_token, "string",
 "expected name of file to import, found string",
-lambda: identifier_token["text"])
+lambda: identifier_token["name"])
     assert_type(identifier_token, "identifier",
 "expected name of file to import, found {}")
 
     return {
         "type": "import_statement",
         "token": identifier_token,
-        "source": identifier_token["text"]
+        "source": identifier_token["name"]
     }, idx
 
 def parse_definition(tokens, idx):
     identifier_token, idx = read_token(tokens, idx)
     assert_type(identifier_token, "identifier",
 "expected name of component, found {}")
-    name = identifier_token["text"]
+    name = identifier_token["name"]
 
     # either 'def fig {' or 'def fig('
     bracket_token, idx = read_token(tokens, idx)
@@ -136,7 +136,7 @@ def parse_children(tokens, idx):
 
 def parse_component(tokens, idx):
     identifier_token = tokens[idx]
-    name = identifier_token["text"]
+    name = identifier_token["name"]
 
     open_token, idx = read_token(tokens, idx)
     assert_type(open_token, ["open_bracket"])
@@ -163,7 +163,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
     had_keyword_arg = False
 
     while tokens[idx]["type"] != "close_bracket":
-        assert_type(tokens[idx], ["identifier", "number", "string", "hex"],
+        assert_type(tokens[idx], ["identifier", "number", "string", "hex", "open_bracket"],
 "expected value or variable name, found {}")
 
         is_identifier = tokens[idx]["type"] == "identifier"
@@ -172,7 +172,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
 
         if is_kwarg and allow_kwargs:
             identifier_token = tokens[idx]
-            arg_name = identifier_token["text"]
+            arg_name = identifier_token["name"]
             colon_token, idx = read_token(tokens, idx)
             assert_type(colon_token, ["colon"])
 
@@ -202,7 +202,7 @@ def parse_args(tokens, idx, allow_kwargs=True):
 
 def parse_arg(tokens, idx):
     value_token = tokens[idx]
-    assert_type(value_token, ["string", "number", "hex", "boolean", "identifier", "comma", "close_bracket"],
+    assert_type(value_token, ["string", "number", "hex", "boolean", "identifier", "comma", "close_bracket", "open_bracket"],
 "expected value, found {}")
 
     # `identified: ,` is treated as a true
@@ -213,27 +213,69 @@ def parse_arg(tokens, idx):
         }
         idx -= 1
 
-    if value_token["type"] == "string":
+    follows_component = tokens[idx+1]["type"] == "open_bracket"
+
+    if value_token["type"] in ["number", "string", "open_bracket"] or \
+        value_token["type"] == "identifier" and not follows_component:
+        expression, idx = parse_expression(tokens, idx) 
         value = {
-            "type": "value",
-            "value": value_token["text"]
+            "type": "expression",
+            "expression": expression
         }
-    if value_token["type"] in ["hex", "number", "boolean"]:
+    if value_token["type"] in ["hex", "boolean"]:
         value = {
             "type": "value",
             "value": value_token["value"]
         }
-    if value_token["type"] == "identifier":
-        # either a variable or a component like a layout
-        if tokens[idx+1]["type"] == "open_bracket":
-            value, idx = parse_component(tokens, idx)
-        else:
-            value = {
-                "type": "arg",
-                "name": value_token["text"]
-            }
+    if value_token["type"] == "identifier" and follows_component:
+        value, idx = parse_component(tokens, idx)
 
     return value, idx
+
+def parse_expression(tokens, idx):
+    output_queue = []
+    operators_stack = []
+
+    operators = ["plus_sign", "minus_sign",
+        "multiplication_sign", "division_sign"]
+
+    while True:
+        token = tokens[idx]
+        if token["type"] in ["string", "number"]:
+            output_queue.append(token)
+        elif token["type"] == "identifier":
+            if tokens[idx+1]["type"] == "open_bracket":
+                break
+            output_queue.append(token)
+        elif token["type"] in operators:
+            while len(operators_stack) > 0 and operators_stack[-1]["type"] in operators:
+                output_queue.append(operators_stack[-1])
+                operators_stack.pop()
+            operators_stack.append(token)
+        elif token["type"] == "open_bracket":
+            operators_stack.append(token)
+        elif token["type"] == "close_bracket":
+            if len(operators_stack) == 0:
+                break
+            while operators_stack[-1]["type"] != "open_bracket":
+                output_queue.append(operators_stack[-1])
+                operators_stack.pop()
+                if len(operators_stack) == 0:
+                    break
+            if len(operators_stack) == 0:
+                    break
+            if operators_stack[-1]["type"] != "open_bracket":
+                break
+            operators_stack.pop()
+        else:
+            break
+        idx += 1
+        
+    while len(operators_stack) > 0:
+        output_queue.append(operators_stack[-1])
+        operators_stack.pop()
+
+    return output_queue, idx-1
 
 def read_token(tokens, idx):
     idx += 1
