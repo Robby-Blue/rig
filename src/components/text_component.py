@@ -45,7 +45,7 @@ class TextComponent(Component):
                 "align_vertical": align_vertical,
                 "fill-color": self.option("color", 0xFFFFFFFF),
                 "font-size": self.option("font_size", 1) * 20 * width_multiplier,
-                "stroke-color": self.option("outline", 0x000000FF),
+                "stroke-color": self.option("outline", 0x00),
                 "stroke-width": self.option("stroke_width", 1) * width_multiplier,
             })
 
