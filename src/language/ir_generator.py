@@ -45,7 +45,7 @@ def definition_get_args(definition_node):
     
     allowed_args = []
     for arg in definition_node["args"]:
-        allowed_args.append(arg["name"])
+        allowed_args.append(arg["expression"][0]["name"])
 
     return component_name, allowed_args
 
@@ -119,6 +119,8 @@ def transpile_args(parent_node, component_args):
             args_ir[keyword] = arg["value"]
         elif arg["type"] == "arg":
             args_ir[keyword] = {"name": arg["name"], "type": "arg"}
+        elif arg["type"] == "expression":
+            args_ir[keyword] = {"expression": arg["expression"], "type": "expression"}
         elif arg["type"] == "component_call":
             args_ir[keyword] = transpile_arg_component(arg)
 

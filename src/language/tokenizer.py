@@ -9,7 +9,11 @@ char_tokens = {
     "(": "open_bracket",
     ")": "close_bracket",
     ":": "colon",
-    ",": "comma"
+    ",": "comma",
+    "+": "plus_sign",
+    "-": "minus_sign",
+    "*": "multiplication_sign",
+    "/": "division_sign"
 }
 
 def tokenize(src):
@@ -44,17 +48,17 @@ def read_identifier(src, idx):
     start_idx = idx
     while src[idx].isalpha() or src[idx] == "_":
         idx += 1
-    text = src[start_idx:idx]
+    name = src[start_idx:idx]
 
-    if text in ["true", "false"]:
+    if name in ["true", "false"]:
         return {
             "type": "boolean",
-            "value": text == "true"
+            "value": name == "true"
         }, idx-1 
 
     return {
-        "type": "keyword" if text in keywords else "identifier",
-        "text": text
+        "type": "keyword" if name in keywords else "identifier",
+        "name": name
     }, idx-1
 
 def read_string(src, idx):

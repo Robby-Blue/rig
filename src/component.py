@@ -6,6 +6,7 @@ class Component():
 
     def __init__(self, **kwargs):
         self.options = kwargs
+
         self.layer = self.option("layer", 0)
 
         self.layout = None
@@ -66,8 +67,9 @@ class Component():
             else:
                 print(self.__class__.__name__, "doesnt have", key)
                 return None
-        return self.options[key]
-    
+        option = self.options[key]
+        return option
+
     def has_option(self, key):
         return key in self.options
     
