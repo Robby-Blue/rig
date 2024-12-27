@@ -14,11 +14,14 @@ class RelativeLayout(Layout):
             # actual container takes up 100%, the container+one width
             # (bc if its normal 100 the left most point is) has to
             # be 100 + width in percent
-            percent_width = (x2-x1) / (100+child.get_width(bounds))
-            percent_height = (y2-y1) / (100+child.get_height(bounds))
+            pos_percent_width = (x2-x1) / (100+child.get_width(bounds))
+            pos_percent_height = (y2-y1) / (100+child.get_height(bounds))
 
-            dx = percent_width * child.option("x", 0)
-            dy = percent_height * child.option("y", 0)
+            percent_width = (x2-x1) / 100
+            percent_height = (y2-y1) / 100
+
+            dx = pos_percent_width * child.option("x", 0)
+            dy = pos_percent_height * child.option("y", 0)
             
             width = percent_width * child.get_width(bounds)
             height = percent_height * child.get_height(bounds)

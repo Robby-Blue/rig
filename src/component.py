@@ -52,7 +52,7 @@ class Component():
         return self
     
     def get_size(self, bounds=None):
-        return [self.option("width", 0), self.option("height", 0)]
+        return [self.option("width", 100), self.option("height", 100)]
 
     def get_width(self, bounds=None):
         return self.get_size(bounds)[0]

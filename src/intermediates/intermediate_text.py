@@ -26,8 +26,7 @@ class IntermediateText(IntermediateElement):
                 "stroke": stroke_color,
                 "stroke-opacity": stroke_opacity,
                 "stroke-width": self.get("stroke-width"),
-                "font-family": "Arial",
-                "font-weight": "bold"
+                "font-family": "Arial"
             },
             [self.get("text")])
 
