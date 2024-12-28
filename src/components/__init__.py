@@ -4,6 +4,7 @@ from components.circle_component import CircleComponent
 from components.text_component import TextComponent
 from components.line_component import LineComponent
 from components.container_component import ContainerComponent
+from components.if_component import IfComponent
 
 types = [
     RootComponent,
@@ -11,7 +12,8 @@ types = [
     CircleComponent,
     TextComponent,
     LineComponent,
-    ContainerComponent
+    ContainerComponent,
+    IfComponent
 ]
 
 def get_component_contructor(name):
