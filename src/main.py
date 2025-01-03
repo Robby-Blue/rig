@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw
 
+import os
 import sys
 import json
 
@@ -86,19 +87,21 @@ def read_component(src, templates, variables):
     return component
 
 def main():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("not enough arguments:")
-        print("python", sys.argv[0], "<input> <output>")
+        print("python", sys.argv[0], "<input> <optional output>")
         return
     
     input_file = sys.argv[1]
-    output_file = sys.argv[2]
+    if len(sys.argv) >= 3:
+        output_file = sys.argv[2]
+    else:
+        output_file = input_file
+        if "." in os.path.basename(output_file):
+            output_file = output_file[:output_file.rindex(".")]
+        output_file += ".svg"
 
-    if input_file.endswith(".json"):
-        with open(input_file, "r") as f:
-            src = json.load(f)
-    if input_file.endswith(".rig"):
-        src = language.compile(input_file)
+    src = language.compile(input_file)
 
     root_component = read_component(src["fig"], src, {})
     intermediate = root_component.to_intermediate()
