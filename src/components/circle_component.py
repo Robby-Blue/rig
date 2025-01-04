@@ -2,11 +2,11 @@ from component import Component
 from intermediates import IntermediateCircle
 
 class CircleComponent(Component):
-    def __init__(self, **kwargs):
-        if "size" in kwargs:
-            kwargs["width"] = kwargs["size"]
-            kwargs["height"] = kwargs["size"]
-        super().__init__(**kwargs)
+    def __init__(self, src, variables, templates):
+        if "size" in src:
+            src["width"] = src["size"]
+            src["height"] = src["size"]
+        super().__init__(src, variables, templates)
 
     def to_intermediate(self, bounds):
         margin_bounds = self.get_margin_bounds(bounds)

@@ -1,8 +1,8 @@
 from component import Component
 
 class RootComponent(Component):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, src, variables, templates):
+        super().__init__(src, variables, templates)
 
     def to_intermediate(self, bounds=None):
         bounds = (0, 0, self.get_width(), self.get_height())

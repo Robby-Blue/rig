@@ -2,8 +2,8 @@ from component import Component
 from intermediates import IntermediateRect
 
 class RectComponent(Component):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, src, variables, templates):
+        super().__init__(src, variables, templates)
 
     def to_intermediate(self, bounds):
         border_radius = self.root().option("width") * 0.02

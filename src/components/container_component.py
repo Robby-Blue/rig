@@ -1,8 +1,8 @@
 from component import Component
 
 class ContainerComponent(Component):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, src, variables, templates):
+        super().__init__(src, variables, templates)
 
     def to_intermediate(self, bounds):
         layout_intermediates = self.get_layout_intermediates(bounds)

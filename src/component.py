@@ -1,16 +1,53 @@
+import expressions
+
 class Component():
 
-    options = {}
-    parent = None
-    layer = 0
+    def __init__(self, src, variables, templates):
+        self.children = []
+        self.parent = None
 
-    def __init__(self, **kwargs):
-        self.options = kwargs
+        self.options = dict(src)
+        self.variables = variables
+        self.templates = templates
+
+        self.variables = variables
+        self.variables = expressions.precalculate_vars(self.variables, variables)
+        self.options = expressions.precalculate_vars(self.options, self.variables)
+
+        if "children" in self.options:
+            self.read_layout()
+            self.read_child_components()
 
         self.layer = self.option("layer", 0)
 
-        self.layout = None
-        self.children = []
+    def read_layout(self):
+        src_layout = self.option("layout", {"type": "relative"})
+        layout_type_name = src_layout["type"]
+        from layouts import get_layout_contructor
+        layout_type = get_layout_contructor(layout_type_name)
+
+        layout = layout_type(src_layout, self.variables, {})
+
+        self.set_layout(layout)
+
+    def read_child_components(self):
+        for child in self.options["children"]:
+            component = Component.read_child_component(child, self.variables, self.templates)
+            self.add_child(component)
+
+    def read_child_component(component, variables, templates):
+        from components import get_component_contructor
+        component_type_name = component["type"]
+
+        if component_type_name == "template":
+            template_name = component["name"]
+            template = dict(templates[template_name])
+            component = expressions.precalculate_vars(component, variables)
+            return Component.read_child_component(template, component, templates)
+        else:
+            component_type = get_component_contructor(component_type_name)
+            component = component_type(component, variables, templates)
+            return component
 
     def set_parent(self, parent):
         self.parent = parent
@@ -67,8 +104,8 @@ class Component():
             else:
                 print(self.__class__.__name__, "doesnt have", key)
                 return None
-        option = self.options[key]
-        return option
+        
+        return self.options[key]
 
     def has_option(self, key):
         return key in self.options

@@ -2,8 +2,8 @@ from component import Component
 from intermediates import IntermediateText
 
 class TextComponent(Component):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, src, variables, templates):
+        super().__init__(src, variables, templates)
 
     def to_intermediate(self, bounds):
         x1, y1, _, _ = bounds

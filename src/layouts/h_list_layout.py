@@ -1,8 +1,8 @@
 from layout import Layout
 
 class HListLayout(Layout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, src, variables, templates):
+        super().__init__(src, variables, templates)
         # whether and how theres lines between the components like borders
 
     def to_intermediate(self, bounds):

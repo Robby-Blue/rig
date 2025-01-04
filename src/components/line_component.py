@@ -2,16 +2,16 @@ from component import Component
 from intermediates import IntermediateLine
 
 class LineComponent(Component):
-    def __init__(self, **kwargs):
-        if "width" in kwargs:
-            kwargs["line_width"] = kwargs["width"]
+    def __init__(self, src, variables, templates):
+        if "width" in src:
+            src["line_width"] = src["width"]
 
-        kwargs["x"] = kwargs["x1"]
-        kwargs["y"] = kwargs["y1"]
-        kwargs["width"] = kwargs["x2"] - kwargs["x1"]
-        kwargs["height"] = kwargs["y2"] - kwargs["y1"]
+        src["x"] = src["x1"]
+        src["y"] = src["y1"]
+        src["width"] = src["x2"] - src["x1"]
+        src["height"] = src["y2"] - src["y1"]
 
-        super().__init__(**kwargs)
+        super().__init__(src, variables, templates)
 
     def to_intermediate(self, bounds):
         base_width = self.root().option("width") * 0.005
