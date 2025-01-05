@@ -8,7 +8,6 @@ class IfComponent(Component):
         return self.get_layout_intermediates(bounds)
     
     def read_child_components(self):
-        print(self.option("condition"))
         if self.option("condition"):
             return super().read_child_components()
         return []

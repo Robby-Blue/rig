@@ -19,7 +19,13 @@ class HListLayout(Layout):
             else:
                 unset_components += 1
         
+        space = self.option("space", "fill")
+
         width_left = (x2-x1)-total_width
+
+        default_width = 0
+        if space == "fill" and unset_components >= 1:
+            default_width = width_left / unset_components
 
         children = []
 
@@ -27,11 +33,13 @@ class HListLayout(Layout):
             if child.has_option("width"):
                 width = percent_width * child.get_width(bounds)
             else:
-                width = width_left / unset_components
+                width = default_width
             child_bounds = (pos_x, y1, pos_x+width, y2)
             children += child.to_intermediate(child_bounds)
 
-            pos_x+=width
+            pos_x += width
+            if space == "space_between":
+                pos_x += width_left / (len(self.parent.children) - 1)
 
         return children
     
@@ -40,7 +48,7 @@ class HListLayout(Layout):
     
     def get_args():
         return {
-            "allowed": [],
+            "allowed": ["space"],
             "positional": [],
             "required": []
         }

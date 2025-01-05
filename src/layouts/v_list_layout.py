@@ -19,19 +19,28 @@ class VListLayout(Layout):
             else:
                 unset_components += 1
         
+        space = self.option("space", "fill")
+
         height_left = (y2-y1)-total_height
 
+        default_height = 0
+        if space == "fill" and unset_components >= 1:
+            default_height = height_left / unset_components
+            
         children = []
 
         for child in self.parent.children:
             if child.has_option("height"):
                 height = percent_height * child.get_height(bounds)
             else:
-                height = height_left / unset_components
+                height = default_height
+
             child_bounds = (x1, pos_y, x2, pos_y+height)
             children += child.to_intermediate(child_bounds)
 
-            pos_y+=height
+            pos_y += height
+            if space == "space_between":
+                pos_y += height_left / (len(self.parent.children) - 1)
 
         return children
     
@@ -40,7 +49,7 @@ class VListLayout(Layout):
     
     def get_args():
         return {
-            "allowed": [],
+            "allowed": ["space"],
             "positional": [],
             "required": []
         }
