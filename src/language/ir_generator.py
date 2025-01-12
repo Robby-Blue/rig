@@ -37,7 +37,7 @@ def import_file(import_call, ast):
         raise CompileException("FileError", import_call["token"],
     "file to import not found")
 
-    _, new_ast = language.file_to_ast(found_name)
+    new_ast = language.file_to_ast(found_name)
     ast += new_ast
 
 def definition_get_args(definition_node):

@@ -16,7 +16,7 @@ char_tokens = {
     "/": "division_sign"
 }
 
-def tokenize(src):
+def tokenize(src, file):
     src += " "
 
     tokens = []
@@ -40,6 +40,7 @@ def tokenize(src):
         if token:
             token["start_index"] = start_idx
             token["end_index"] = idx
+            token["file"] = file
             tokens.append(token)
         idx += 1
     return tokens

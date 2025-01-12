@@ -182,14 +182,15 @@ def parse_args(tokens, idx, allow_kwargs=True):
             args.append(value)
             had_keyword_arg = True
         else:
+            file = tokens[idx]["file"]
             start_idx = tokens[idx]["start_index"]
             value, idx = parse_arg(tokens, idx)
             end_idx = tokens[idx]["end_index"]
-            value["pos"] = (start_idx, end_idx)
+            value["pos"] = (file, start_idx, end_idx)
             args.append(value)
 
             if had_keyword_arg:
-                raise CompileException("ArgumentError", (start_idx, end_idx),
+                raise CompileException("ArgumentError", (file, start_idx, end_idx),
                     "can't use position arg after keyword arg")
 
         next_token, idx = read_token(tokens, idx)

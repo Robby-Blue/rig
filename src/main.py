@@ -23,7 +23,10 @@ def main():
             output_file = output_file[:output_file.rindex(".")]
         output_file += ".svg"
 
-    src = language.compile(input_file)
+    with open(input_file, "r") as f:
+        src = "\n" + f.read()
+
+    src = language.compile(src, input_file)
 
     root_component = Component.read_child_component(src["fig"], {}, src)
     

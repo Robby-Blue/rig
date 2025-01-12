@@ -5,34 +5,37 @@ from language.compile_exception import CompileException
 
 import sys
 
-def compile(file):
-    src, ast = file_to_ast(file)
+def compile(src, file):
+    ast = to_ast(src, file)
     try:
         ir = generate_ir(ast)
         return ir
     except CompileException as e:
-        print_error(e, src, file)
+        print_error(e)
         sys.exit(1)
 
 def file_to_ast(file):
     with open(file, "r") as f:
         src = "\n" + f.read()
+    return to_ast(src, file)
 
+def to_ast(src, file):
+    try:
+        tokens = tokenize(src, file)
         try:
-            tokens = tokenize(src)
-            try:
-                ast = parse(tokens)
-            except IndexError:
-                start = tokens[-1]["end_index"] - 1
-                end = tokens[-1]["end_index"] + 1
-                raise CompileException("SyntaxError", (start, end),
-                    "Unexpected EOF")
-            return src, ast
-        except CompileException as e:
-            print_error(e, src, file)
-            sys.exit(1)
+            ast = parse(tokens)
+        except IndexError:
+            file = tokens[-1]["file"]
+            start = tokens[-1]["end_index"] - 1
+            end = tokens[-1]["end_index"] + 1
+            raise CompileException("SyntaxError", (file, start, end),
+                "Unexpected EOF")
+        return ast
+    except CompileException as e:
+        print_error(e)
+        sys.exit(1)
 
-def print_error(error, src, file):
+def print_error(error):
     red = "\x1b[1;34;31m"
     green = "\x1b[1;34;32m"
     reset = "\x1b[0m"
@@ -44,6 +47,10 @@ def print_error(error, src, file):
 
     start_index = error.start_index
     end_index = error.end_index
+    file = error.file
+
+    with open(file, "r") as f:
+        src = "\n" + f.read()
 
     line_start_index = src.rindex("\n", 0, start_index) + 1
     line_end_index = (src+"\n").index("\n", start_index)
