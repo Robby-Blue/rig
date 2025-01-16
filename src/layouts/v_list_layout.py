@@ -30,12 +30,14 @@ class VListLayout(Layout):
         children = []
 
         for child in self.parent.children:
+            child_x1, child_x2 = self.calc_pos_in_bounds(child.option("x", 0), child.get_width(bounds), x1, x2)
+
             if child.has_option("height"):
                 height = percent_height * child.get_height(bounds)
             else:
                 height = default_height
 
-            child_bounds = (x1, pos_y, x2, pos_y+height)
+            child_bounds = (child_x1, pos_y, child_x2, pos_y+height)
             children += child.to_intermediate(child_bounds)
 
             pos_y += height

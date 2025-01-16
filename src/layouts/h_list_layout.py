@@ -30,11 +30,13 @@ class HListLayout(Layout):
         children = []
 
         for child in self.parent.children:
+            child_y1, child_y2 = self.calc_pos_in_bounds(child.option("y", 0), child.get_height(bounds), x1, x2)
+
             if child.has_option("width"):
                 width = percent_width * child.get_width(bounds)
             else:
                 width = default_width
-            child_bounds = (pos_x, y1, pos_x+width, y2)
+            child_bounds = (pos_x, child_y1, pos_x+width, child_y2)
             children += child.to_intermediate(child_bounds)
 
             pos_x += width
