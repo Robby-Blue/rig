@@ -3,36 +3,16 @@ from intermediates import IntermediateText
 
 class TextComponent(Component):
     def __init__(self, src, variables, templates):
+        src["height"] = 1
         super().__init__(src, variables, templates)
 
     def to_intermediate(self, bounds):
         x1, y1, _, _ = bounds
-        
-        align_h = "right"
-        if self.option("center_h", False):
-            align_h = "center"
-        if self.has_option("align_text_h"):
-            align_h = self.option("align_text_h", "")
-
-        align_v = "bottom"
-        if self.option("center_v", False):
-            align_v = "center"
-        if self.has_option("align_text_v"):
-            align_v = self.option("align_text_v", "")
 
         text_anchor = "middle"
         align_vertical = "center"
         # normally youd use dominant-baseline,
         # but that doesnt work everywhere
-
-        if align_h == "right":
-            x1, _, _, _ = self.get_margin_bounds(bounds)
-            text_anchor = "start"
-        if align_h == "left":
-            text_anchor = "end"
-        if align_v == "bottom":
-            _, y1, _, _ = self.get_margin_bounds(bounds)
-            align_vertical = "bottom"
 
         width_multiplier = self.root().option("width") / 700
 
@@ -52,7 +32,14 @@ class TextComponent(Component):
         return [svg_element]
     
     def get_size(self, bounds=None):
-        return [0, 0]
+        _, y1, _, y2 = bounds
+        container_height = y2 - y1
+
+        width_multiplier = self.root().option("width") / 700
+        font_size = self.option("font_size", 1) * 20 * width_multiplier
+        text_height = 1 * font_size
+
+        return [0, text_height / container_height * 100]
     
     def get_name(self=None):
         return "text"

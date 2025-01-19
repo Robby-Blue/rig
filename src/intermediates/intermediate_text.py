@@ -9,17 +9,12 @@ class IntermediateText(IntermediateElement):
         fill_color, fill_opacity = hex_to_rgba_alpha_str(self.get("fill-color"))
         stroke_color, stroke_opacity = hex_to_rgba_alpha_str(self.get("stroke-color"))
 
-        align_vertical = self.get("align_vertical")
-        dy = "0.25em"
-        if align_vertical == "bottom":
-            dy = "1em"
-
         return SVGElement("text",              
             {
                 "x": self.get("x"),
                 "y": self.get("y"),
-                "text-anchor": self.get("text-anchor"),
-                "dy": dy,
+                "text-anchor": "start",
+                "dy": "0.8em",
                 "fill": fill_color,
                 "fill-opacity": fill_opacity,
                 "font-size": self.get("font-size"),
@@ -38,25 +33,12 @@ class IntermediateText(IntermediateElement):
         y = self.get("y")
         text = self.get("text")
 
-        if self.get("text-anchor") == "middle":
-            anchor_x = "m"
-        elif self.get("text-anchor") == "start":
-            anchor_x = "l"
-        elif self.get("text-anchor") == "end":
-            anchor_x = "r"
-
-        anchor_y = "b"
-        if self.get("align_vertical") == "center":
-            anchor_y = "m"
-        if self.get("align_vertical") == "bottom":
-            anchor_y = "t"
-
         stroke_width = self.get("stroke-width")
 
         img.text((x, y),
             text,
             font=font,
-            anchor=anchor_x+anchor_y,
+            anchor="lt",
             fill=hex_to_tuple(self.get("fill-color")),
             stroke_fill=hex_to_tuple(self.get("stroke-color")),
             stroke_width=int(stroke_width))
