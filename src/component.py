@@ -72,7 +72,8 @@ class Component():
         return []
 
     def get_margin_bounds(self, bounds, amplifier=1):
-        margin = self.root().option("width") * 0.003 * amplifier
+        # TODO: test this more, try a layout flag instead
+        margin = self.parent.option("width", 0) * 0.003 * amplifier
 
         x1, y1, x2, y2 = bounds
 

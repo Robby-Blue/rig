@@ -13,7 +13,7 @@ class IntermediateText(IntermediateElement):
             {
                 "x": self.get("x"),
                 "y": self.get("y"),
-                "text-anchor": "start",
+                "text-anchor": self.get("text-anchor"),
                 "dy": "0.8em",
                 "fill": fill_color,
                 "fill-opacity": fill_opacity,
