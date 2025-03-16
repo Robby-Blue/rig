@@ -9,12 +9,17 @@ class IntermediateText(IntermediateElement):
         fill_color, fill_opacity = hex_to_rgba_alpha_str(self.get("fill-color"))
         stroke_color, stroke_opacity = hex_to_rgba_alpha_str(self.get("stroke-color"))
 
+        align_vertical = self.get("align_vertical")
+        dy = "0.25em"
+        if align_vertical == "bottom":
+            dy = "1em"
+
         return SVGElement("text",              
             {
                 "x": self.get("x"),
                 "y": self.get("y"),
                 "text-anchor": self.get("text-anchor"),
-                "dy": "0.8em",
+                "dy": dy,
                 "fill": fill_color,
                 "fill-opacity": fill_opacity,
                 "font-size": self.get("font-size"),

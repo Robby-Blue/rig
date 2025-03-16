@@ -15,16 +15,18 @@ class TextComponent(Component):
         # but that doesnt work everywhere
 
         width_multiplier = self.root().option("width") / 700
+        font_size = self.option("font_size", 1) * 20 * width_multiplier
+        text_height = 1 * font_size
 
         svg_element = IntermediateText(self,
             {
                 "text": self.option("text"),
                 "x": x1,
-                "y": y1,
+                "y": y1 + text_height/2,
                 "text-anchor": text_anchor,
                 "align_vertical": align_vertical,
                 "fill-color": self.option("color", 0xFFFFFFFF),
-                "font-size": self.option("font_size", 1) * 20 * width_multiplier,
+                "font-size": font_size,
                 "stroke-color": self.option("outline", 0x00),
                 "stroke-width": self.option("stroke_width", 1) * width_multiplier,
             })
